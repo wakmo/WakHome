@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:integration="http://www.springframework.org/schema/integration"
+       xsi:schemaLocation="http://www.springframework.org/schema/batch
+		http://www.springframework.org/schema/batch/spring-batch-2.2.xsd
+		http://www.springframework.org/schema/beans 
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/util 
+		http://www.springframework.org/schema/util/spring-util-3.2.xsd http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration.xsd">
+
+    <import resource="../config/context.xml"/>
+    <import resource="../config/database.xml"/>
+
+    <bean id="itemReader"
+          class="org.springframework.batch.item.database.JdbcCursorItemReader"
+          scope="step">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="sql"
+                  value="select ID, USER_LOGIN, USER_PASS, AGE from USERS where age > #{jobParameters['age']}"/>
+        <property name="rowMapper">
+            <bean class="com.mkyong.UserRowMapper"/>
+        </property>
+    </bean>
+
+    <bean id="pagingItemReader"
+          class="org.springframework.batch.item.database.JdbcPagingItemReader"
+          scope="step">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="queryProvider">
+            <bean
+                    class="org.springframework.batch.item.database.support.SqlPagingQueryProviderFactoryBean">
+                <property name="dataSource" ref="dataSource"/>
+                <!--<property name="selectClause" value="select id, user_login, user_pass, age"/>-->
+                <!--<property name="fromClause" value="from users"/>-->
+                <property name="selectClause" value="select u.id, u.user_login, u.user_pass, u.age , g.description"/>
+                <property name="fromClause" value="from users u inner join (select id as agg, description from ages) g on u.age=g.agg"/>
+                <!-- <property name="whereClause" value="where user_login=:name"/> -->
+                <property name="whereClause" value="where u.age > :name"/>
+                <property name="sortKey" value="id"/>
+            </bean>
+        </property>
+        <property name="parameterValues">
+            <map>
+                <!-- <entry key="name" value="#{jobParameters['name']}"/> -->
+                <entry key="name" value="#{jobParameters['age']}"/>
+            </map>
+        </property>
+        <property name="pageSize" value="1000"/>
+        <property name="rowMapper">
+            <bean class="com.mkyong.UserRowMapper"/>
+        </property>
+    </bean>
+
+    <job id="testJob" xmlns="http://www.springframework.org/schema/batch">
+        <step id="step1">
+            <tasklet>
+                <!--<chunk reader="itemReader" writer="itemWriter" commit-interval="1"/>-->
+                <chunk reader="pagingItemReader" writer="gatewayWriter" commit-interval="1"/>
+                <!-- <chunk reader="pagingItemReader" writer="itemWriter" commit-interval="1"/> -->
+            </tasklet>
+        </step>
+    </job>
+
+    <bean id="itemWriter" class="org.springframework.batch.item.xml.StaxEventItemWriter">
+        <property name="resource" value="file:xml/outputs/users.xml"/>
+        <property name="marshaller" ref="userUnmarshaller"/>
+        <property name="rootTagName" value="users"/>
+    </bean>
+
+    <bean id="userUnmarshaller" class="org.springframework.oxm.xstream.XStreamMarshaller">
+        <property name="aliases">
+            <util:map id="aliases">
+                <entry key="user" value="com.mkyong.User"/>
+            </util:map>
+        </property>
+    </bean>
+
+    <!-- csv file writer -->
+    <bean id="flatFileItemWriter" class="org.springframework.batch.item.file.FlatFileItemWriter">
+        <property name="resource" value="file:csv/outputs/users.all.csv"/>
+        <property name="appendAllowed" value="true"/>
+        <property name="lineAggregator">
+            <bean
+                    class="org.springframework.batch.item.file.transform.DelimitedLineAggregator">
+                <property name="delimiter" value=","/>
+                <property name="fieldExtractor">
+                    <bean
+                            class="org.springframework.batch.item.file.transform.BeanWrapperFieldExtractor">
+                        <property name="names" value="id, username, password, age"/>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- My things -->
+
+    <integration:channel id="requests"/>
+    <integration:gateway id="gatewayWriter"
+                         service-interface="org.springframework.batch.item.ItemWriter"
+                         default-request-channel="requests" />
+
+    <integration:channel id="replies"/>
+    <!--<integration:service-activator input-channel="requests" output-channel="replies" ref="chunkHandler" />-->
+    <integration:service-activator input-channel="requests" output-channel="replies" method="process" ref="endProcessor" />
+
+    <bean id="endProcessor" class="com.mkyong.chunk.EndProcessor"/>
+
+    <bean id="chunkHandler" class="com.mkyong.chunk.ChunkProcessorChunkHandler">
+        <property name="chunkProcessor">
+            <bean class="org.springframework.batch.core.step.item.SimpleChunkProcessor">
+                <property name="itemWriter">
+                    <bean class="com.mkyong.chunk.TestItemWriter" />
+                </property>
+                <property name="itemProcessor">
+                    <bean class="org.springframework.batch.item.support.PassThroughItemProcessor" />
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+
+
+
+</beans>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+<beans>
+
+	<bean id="demoDataSource" class="com.atomikos.jdbc.AtomikosDataSourceBean"
+		init-method="init" destroy-method="close">
+		<property name="uniqueResourceName" value="demo" />
+		<property name="xaDataSourceClassName" value="org.apache.derby.jdbc.EmbeddedXADataSource" />
+		<property name="xaProperties">
+			<props>
+				<prop key="databaseName">demo</prop>
+				<prop key="createDatabase">create</prop>
+			</props>
+		</property>
+		<property name="minPoolSize" value="1" />
+		<property name="maxPoolSize" value="5" />
+		<property name="borrowConnectionTimeout" value="10000" />
+	</bean>
+
+	<bean id="jndi"
+		class="org.apache.xbean.spring.jndi.SpringInitialContextFactory"
+		factory-method="makeInitialContext">
+		<property name="entries">
+			<map>
+				<entry key="java:comp/env/jdbc/demo" value-ref="demoDataSource" />
+			</map>
+		</property>
+	</bean>
+
+</beans>

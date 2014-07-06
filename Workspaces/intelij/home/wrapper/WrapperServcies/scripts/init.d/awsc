@@ -1,0 +1,60 @@
+#!/bin/bash
+# Start / stop script for running Aconite ICS Converter Service 
+# 
+# chkconfig: - 85 15
+# description: Runs Aconite AWSC 
+
+
+export AWSC_HOME=/home/awsc/aconite/converter
+export SRVC_OWNR=awsc
+
+export START_LOG=$AWSC_HOME/awsc-start.log
+export STOP_LOG=$AWSC_HOME/awsc-stop.log
+
+
+
+start() 
+{
+    echo "********************************************************************************"
+    echo "Starting Aconite ICS Converter Service on $(date)"
+    echo "********************************************************************************"	
+    su $SRVC_OWNR -c 'cd $AWSC_HOME; $AWSC_HOME/start-converter.sh' >> $START_LOG 2>&1 &	
+    return 0
+}
+
+stop() 
+{
+
+    echo "********************************************************************************"
+    echo "Stopping Aconite ICS Converter Service  on $(date)"
+    echo "********************************************************************************"
+    su $SRVC_OWNR -c 'cd $AWSC_HOME; $AWSC_HOME/stop-converter.sh' >> $STOP_LOG 2>&1
+    return 0
+}
+
+restart()
+{
+     stop
+     start
+	return 0
+}
+
+
+
+case "$1" in
+    start)
+        start 
+        ;;
+    stop)
+        stop
+        ;;	
+	restart)
+		restart
+		;;
+    *)
+        echo "Usage: $(basename $0) start|stop|restart"
+        exit 1
+esac
+
+exit $?
+

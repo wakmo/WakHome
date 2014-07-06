@@ -1,0 +1,10 @@
+----------------------------------------------------------------
+Sun Feb 23 11:40:41 GMT 2014:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.8.1.2 - (1095077): instance a816c00e-0144-5e8c-0cd3-000000a0b158 
+on database directory E:\Wakkir\workspaces\atomikos\examples-jta-spring-3.9.2\db  with class loader sun.misc.Launcher$AppClassLoader@a4be02 
+Loaded from file:/E:/Wakkir/workspaces/repos/local/org/apache/derby/derby/10.8.1.2/derby-10.8.1.2.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.7.0_15-b03
+user.dir=E:\Wakkir\workspaces\atomikos\examples-jta-spring-3.9.2
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''

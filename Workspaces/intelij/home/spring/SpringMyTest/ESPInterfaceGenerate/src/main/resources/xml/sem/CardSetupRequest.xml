@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CardSetupRequest>
+    <TrackingReference>CTH00112M1006492895</TrackingReference>
+    <Card PAN="0129002312" PANSequence="01" ExpirationDate="1385855999999"/>
+    <Application applicationType="Master" applicationVersion="1.0"/>
+</CardSetupRequest>

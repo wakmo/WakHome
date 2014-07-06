@@ -1,0 +1,164 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="appProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>classpath:common.properties</value>
+                <value>classpath:espinterface.properties</value>
+            </list>
+        </property>
+    </bean>
+	
+	<!-- <bean id="appProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="ignoreUnresolvablePlaceholders" value="false"/>
+		<property name="propertiesArray">
+			<list>
+				<bean factory-bean="configProperties" factory-method="getProperties"/>
+			</list>
+		</property>
+    </bean>
+	
+	<bean id="configProperties" class="net.aconite.affina.espinterface.config.IConfigurationProperties"/>
+	 -->
+
+</beans>
+
+
+        <!--
+        <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+            <property name="ignoreUnresolvablePlaceholders" value="false"/>
+            <property name="propertiesArray">
+                <list>
+                    <bean factory-bean="configProperties" factory-method="getProperties"/>
+                </list>
+            </property>
+        </bean>
+
+        <bean id="configProperties" interface="net.aconite.affina.config.properties.IConfigurationProperties"/>
+
+
+        public interface IConfigurationProperties
+        {
+            // Allows a client to query a single property
+            public String getProperty(String key);
+
+            // The following method method works well with Spring's property placeholder configurer
+            public Properties getProperties();
+        }
+
+
+        <bean id="configProperties" class="net.aconite.affina.config.properties.file.FileConfigurer" init-method="start">
+            <constructor-arg ref="log"/>
+        </bean>
+
+        public class FileConfigurer implements IConfigurationProperties
+        {
+            /** Logger */
+            private final Logger log;
+
+            /** Poperties */
+            private final Properties emfConfigProperties = new Properties();
+
+            /**
+             * Constructor
+             * @param log : Logger
+             */
+            public FileConfigurer(final Logger log)
+            {
+                this.log = log;
+            }
+
+            /**
+             * Load the propeties file
+             */
+            public void start()
+            {
+                InputStream is = null;
+                File vFile = null;
+
+                final String filename = System.getProperty("emf.configFile");
+
+                try
+                {
+                    if (null == filename || filename.trim().equals(""))
+                    {
+                        log.info("Using default configuration config.properties.");
+                        log.info("If you would like to change the default configuration please add "
+                                        + "following param before startup -Demf.configFile=<configFile>");
+                        vFile = new File("config.properties");
+                        is = new FileInputStream(vFile);
+                    }
+                    else
+                    {
+                        vFile = new File(filename);
+                        if (!vFile.exists())
+                        {
+                            final String msg =
+                                "ACO-APM-FILE-001 - It is not possible to load the given configuration properties file :"
+                                                + vFile.getAbsolutePath();
+
+                            log.error(msg);
+                            throw new IOException(msg);
+                        }
+                        else
+                        {
+                            is = new FileInputStream(vFile);
+                        }
+                    }
+
+                    if (is != null)
+                    {
+                        log.info("Configuration file in use : " + vFile.getAbsolutePath());
+                        emfConfigProperties.load(is);
+                    }
+                }
+                catch (final FileNotFoundException e)
+                {
+                    log.error("ACO-APM-FILE-001 - FileNotFoundException", e);
+                }
+                catch (final IOException e)
+                {
+                    log.error("ACO-APM-FILE-001 - IOException", e);
+                }
+                finally
+                {
+                    try
+                    {
+                        // Close the inputStream
+                        if (is != null)
+                        {
+                            is.close();
+                        }
+                    }
+                    catch (final IOException e)
+                    {
+                        log.error("IOException", e);
+                    }
+                }
+            }
+
+            /**
+             * @param pKey : the key
+             * @return the property value
+             */
+            @Override
+            public String getProperty(final String pKey)
+            {
+                return emfConfigProperties.getProperty(pKey);
+            }
+
+            /**
+             * @return all the properties
+             */
+            @Override
+            public Properties getProperties()
+            {
+                return emfConfigProperties;
+            }
+        }
+
+
+         -->

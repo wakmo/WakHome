@@ -1,0 +1,14 @@
+#set( $isError = (${status} == "ERROR"))
+Response received
+-----------------
+Type : ${responseType}
+Tracking reference : ${trackId}
+Status : ${status}
+#if ($isError)
+    Error Data : ${errorData}
+    Error Desc : ${errorDesc}
+    Error Code : ${errorCode}
+#end
+<p>Welcome ${firstName} ${lastName}.</p>
+
+

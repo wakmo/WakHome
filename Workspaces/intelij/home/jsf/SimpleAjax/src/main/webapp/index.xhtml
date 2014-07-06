@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets" xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+</h:head>
+<h:body>
+	<h:form>
+			<h:messages id="myMessage" globalOnly="true" showDetail="true" />
+			Your Name: <h:inputText id="inputname" label="${msgs.prompt}" value="#{user.name}" />
+		<br />
+		<h:commandButton action="#{user.sayHello}" value="Display my name here, now!">
+			<f:ajax render="myName myCars myMessage myColors" execute="inputname" listener="#{user.editMyCarsList}" />
+		</h:commandButton>
+		<br />
+		<br />
+		<h:outputText id="myName" value="#{user.name}" />
+		<br />
+		<br />
+		Choose your car:
+		<h:selectOneMenu id="myCars" binding="#{user.htmlSelectCars}" value="#{user.selectedCar}">
+			<f:ajax render="myColors" execute="inputname myCars"/>
+		</h:selectOneMenu>
+		<br />
+		<br />
+		<h:panelGroup id="myColors">
+			<h:selectOneMenu value="#{user.selectedColor}" rendered="#{user.colorsAlloweToDisplay}">
+				<f:selectItems value="#{user.colors}" />
+			</h:selectOneMenu>
+		</h:panelGroup>
+	</h:form>
+	</h:body>
+</html>

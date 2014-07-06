@@ -1,0 +1,278 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:int="http://www.springframework.org/schema/integration"
+       xmlns:int-xml="http://www.springframework.org/schema/integration/xml"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/integration
+		http://www.springframework.org/schema/integration/spring-integration.xsd
+        http://www.springframework.org/schema/integration/xml
+        http://www.springframework.org/schema/integration/xml/spring-integration-xml.xsd">
+
+    <context:annotation-config/>
+    <context:component-scan base-package="net.aconite.affina.espinterface.handler.message"/>
+	<context:component-scan base-package="net.aconite.affina.espinterface.handler.feedback"/>
+	<context:component-scan base-package="net.aconite.affina.espinterface.security"/>
+	<context:component-scan base-package="net.aconite.affina.espinterface.scripting.statusupdate"/>
+	<context:component-scan base-package="net.aconite.affina.espinterface.config"/>
+
+    <!-- In Channels with Decryptor-->
+    <int:channel id="fromAffinaToEspJMSChannel"/>
+    <int:channel id="fromSemToEspJMSChannel"/>
+    <!-- <int:channel id="fromCustServToEspJMSChannel"/> -->
+
+    <!-- Out Channels -->
+    <int:channel id="fromEspToAffinaJMSChannel"/>
+    <int:channel id="fromEspToSemJMSChannel"/>
+    <!-- <int:channel id="fromEspToCustServJMSChannel"/>-->
+
+    <!-- Out Error/Progress Channels -->
+    <int:channel id="fromEspToAffinaErrorChannel"/>
+    <int:channel id="fromEspToAffinaProgressChannel"/>
+
+
+    <!--###################### AFFINA-ESP IN/OUT JMS Channels ###################################-->
+
+    <!--from Affina to ESP Message Decryptor -->
+    <int:service-activator input-channel="fromAffinaToEspJMSChannel" ref="pciEnforcerAffinaEsp" method="decryptMessage"
+                           output-channel="fromAffinaToEspUnmarshallerChannel"/>
+
+
+    <!--from Affina to ESP unmarshaller -->
+    <int:channel id="fromAffinaToEspUnmarshallerChannel"/>
+    <int-xml:unmarshalling-transformer id="affinaEspUnmarshaller"
+                                       input-channel="fromAffinaToEspUnmarshallerChannel"
+                                       output-channel="fromAffinaToEspRouterChannel"
+                                       unmarshaller="fromAffinaToEspUnmarshaller"/>
+
+    <bean id="fromAffinaToEspUnmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+        <property name="contextPath" value="net.aconite.affina.espinterface.xmlmapping.affina"/>
+    </bean>
+
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <!--from ESP to AFFINA Message Encryptor -->
+    <int:channel id="fromEspToAffinaPCIChannel"/>
+    <int:service-activator input-channel="fromEspToAffinaPCIChannel" ref="pciEnforcerAffinaEsp" method="encryptMessage"
+                           output-channel="fromEspToAffinaProgressChannel"/>
+
+    <!-- from Esp to Affina marshaller -->
+    <int:channel id="toAffinaMarshallerChannel"/>
+    <int-xml:marshalling-transformer
+            input-channel="toAffinaMarshallerChannel"
+            output-channel="fromEspToAffinaPCIChannel"
+            marshaller="fromEspToAffinaJaxbMarshaller"
+            result-transformer="affinaEspResultTransformer"/>
+
+    <bean id="fromEspToAffinaJaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+        <property name="contextPath" value="net.aconite.affina.espinterface.xmlmapping.sem"/>
+        <property name="marshallerProperties">
+            <map>
+                <entry key="jaxb.encoding" value="#{appProperties['esp.xml.encoding']}"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="affinaEspResultTransformer"
+          class="org.springframework.integration.xml.transformer.ResultToStringTransformer">
+        <property name="outputProperties">
+            <value>
+                encoding=#{appProperties['esp.xml.encoding']}
+            </value>
+        </property>
+    </bean>
+
+    <!--###################### SEM-ESP IN/OUT JMS Channels ############################################-->
+
+    <!--from SEM to ESP Message Decryptor -->
+    <int:service-activator input-channel="fromSemToEspJMSChannel" ref="pciEnforcerSemEsp" method="decryptMessage"
+                           output-channel="fromSemToEspUnmarshallerChannel"/>
+
+    <!--from SEM to ESP unmarshaller -->
+    <int:channel id="fromSemToEspUnmarshallerChannel"/>
+    <int-xml:unmarshalling-transformer id="semEspUnmarshaller"
+                                       input-channel="fromSemToEspUnmarshallerChannel"
+                                       output-channel="fromSemToEspRouterChannel"
+                                       unmarshaller="fromSemToEspJaxbUnmarshaller"/>
+
+    <bean id="fromSemToEspJaxbUnmarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+        <property name="contextPath" value="net.aconite.affina.espinterface.xmlmapping.sem"/>
+    </bean>
+
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <!--from ESP to AFFINA Message Encryptor -->
+    <int:channel id="fromEspToSemPCIChannel"/>
+    <int:service-activator input-channel="fromEspToSemPCIChannel" ref="pciEnforcerSemEsp" method="encryptMessage"
+                           output-channel="fromEspToSemJMSChannel"/>
+
+    <!-- from Esp to Sem marshaller -->
+    <int:channel id="toSemMarshallerChannel"/>
+    <int-xml:marshalling-transformer
+            input-channel="toSemMarshallerChannel"
+            output-channel="fromEspToSemPCIChannel"
+            marshaller="fromEspToSemJaxbMarshaller"
+            result-transformer="semEspResultTransformer"/>
+
+    <bean id="fromEspToSemJaxbMarshaller" class="org.springframework.oxm.jaxb.Jaxb2Marshaller">
+        <property name="contextPath" value="net.aconite.affina.espinterface.xmlmapping.sem"/>
+        <property name="marshallerProperties">
+            <map>
+                <entry key="jaxb.encoding" value="#{appProperties['esp.xml.encoding']}"/>
+            </map>
+        </property>
+    </bean>
+
+    <bean id="semEspResultTransformer"
+          class="org.springframework.integration.xml.transformer.ResultToStringTransformer">
+        <property name="outputProperties">
+            <value>
+                encoding=#{appProperties['esp.xml.encoding']}
+            </value>
+        </property>
+    </bean>
+
+    <!--###################### ERROR HANDLING ############################################-->
+
+    <int:channel id="errorChannel">
+        <int:queue capacity="10"/>
+    </int:channel>
+    <!-- <int:poller  id="errorPoller" default="true" fixed-delay="1000"/> -->
+    <!-- <int:poller id="errorPoller" fixed-rate="1000" error-channel="errorChannel"/> -->
+
+    <int:service-activator input-channel="errorChannel" ref="errorHandler" method="process"
+                           output-channel="toErrorRouterChannel">
+        <int:poller fixed-delay="1000"/>
+    </int:service-activator>
+
+    <int:channel id="toErrorRouterChannel"/>
+    <int:exception-type-router input-channel="toErrorRouterChannel" default-output-channel="fromEspToAffinaErrorChannel"
+                               timeout="1000">
+        <int:mapping channel="fromEspToAffinaErrorChannel" exception-type="java.lang.IllegalArgumentException"/>
+        <int:mapping channel="fromEspToAffinaErrorChannel" exception-type="java.lang.NullPointerException"/>
+    </int:exception-type-router>
+
+    <!--###################### PROGRESS HANDLING ############################################-->
+
+    <!-- 	<int:channel id="progressChannel">
+            <int:queue capacity="10"/>
+        </int:channel> -->
+
+    <int:service-activator input-channel="progressChannel" ref="progressHandler" method="process"
+                           output-channel="toProgressRouterChannel">
+        <!-- <int:poller fixed-delay="1000"/> -->
+    </int:service-activator>
+
+    <int:channel id="toProgressRouterChannel"/>
+    <int:recipient-list-router input-channel="toProgressRouterChannel"
+                               default-output-channel="fromEspToAffinaProgressChannel"
+                               timeout="1000">  <!--ignore-send-failures="true"   apply-sequence="true"-->
+        <int:recipient channel="fromEspToAffinaProgressChannel" selector-expression="payload.equals('foo')"/>
+        <int:recipient channel="fromEspToAffinaProgressChannel" selector-expression="headers.containsKey('bar')"/>
+    </int:recipient-list-router>
+
+    <!--###################### MESSAGE ROUTINGS ############################################-->
+
+    <!-- Message Routing-->
+    <!-- Msg from Affina to ESP router -->
+    <int:channel id="fromAffinaToEspRouterChannel"/>
+    <int:payload-type-router input-channel="fromAffinaToEspRouterChannel" timeout="1000">
+        <int:mapping channel="toCardSetupAlertChannel"
+                     type="net.aconite.affina.espinterface.xmlmapping.affina.CardSetupAlert"/>
+        <int:mapping channel="toStageScriptAlertChannel"
+                     type="net.aconite.affina.espinterface.xmlmapping.affina.StageScriptAlert"/>
+    </int:payload-type-router>
+
+    <!-- Msg from SEM to ESP router -->
+    <int:channel id="fromSemToEspRouterChannel"/>
+    <int:payload-type-router input-channel="fromSemToEspRouterChannel" timeout="1000">
+        <int:mapping channel="toCardSetupResponseChannel"
+                     type="net.aconite.affina.espinterface.xmlmapping.sem.CardSetupResponse"/>
+        <int:mapping channel="toStageScriptResponseChannel"
+                     type="net.aconite.affina.espinterface.xmlmapping.sem.StageScriptResponse"/>
+        <int:mapping channel="toScriptStatusUpdateChannel"
+                     type="net.aconite.affina.espinterface.xmlmapping.sem.ScriptStatusUpdate"/>
+    </int:payload-type-router>
+    <!-- 
+	<int:payload-type-router input-channel="fromAffinaToEspRouterChannel">
+        <int:mapping type="com.platform7.affinainterface.sds.DeliveryPackageFile" channel="toDeliveryPackageFileSplitter" />
+        <int:mapping type="com.platform7.affinainterface.sds.BureauReturnRejectFile" channel="errorChannel" />
+        <int:mapping type="com.platform7.affinainterface.sds.BureauReturnRejectRecord" channel="errorChannel" />
+    </int:payload-type-router>
+	-->
+
+    <!--###################### MESSAGE GATEWAY ############################################-->
+    <!--
+    <int:gateway default-request-channel="toCardSetupAlertChannel" service-interface="net.aconite.affina.espinterface.handler.IMyHandler" error-channel="errorChannel"/>
+     -->
+
+    <!--###################### MESSAGE(Alert) SPLITTERS ############################################-->
+
+    <!-- Delivery Package File (from Affina) -->
+    <int:channel id="toCardSetupAlertChannel"/>
+    <int:splitter id="cardSetupAlertHandlingSplitter" input-channel="toCardSetupAlertChannel"
+                  ref="cardSetupAlertHandler" output-channel="toSemMarshallerChannel"/>
+
+    <int:channel id="toStageScriptAlertChannel"/>
+    <int:splitter id="stageScriptAlertHandlingSplitter" input-channel="toStageScriptAlertChannel"
+                  ref="stageScriptAlertHandler" output-channel="toSemMarshallerChannel"/>
+
+
+    <!--###################### MESSAGE TRANSFORMER ############################################-->
+    <!-- Message processing -->
+    <!--from ESP to SEM Message processor -->
+    <!-- <int:channel id="toCardSetupAlertChannel" /> -->
+    <!-- <int:transformer input-channel="toCardSetupAlertChannel" ref="cardSetupAlertHandler" output-channel="toSemMarshallerChannel"/> -->
+
+    <!-- <int:channel id="toStageScriptAlertChannel" /> -->
+    <!-- <int:transformer input-channel="toStageScriptAlertChannel" ref="stageScriptAlertHandler" output-channel="toSemMarshallerChannel" /> -->
+
+    <int:channel id="toScriptStatusUpdateChannel"/>
+    <int:transformer input-channel="toScriptStatusUpdateChannel" ref="scriptStatusRequestHandler"
+                     output-channel="toSemMarshallerChannel"/>
+
+    <!--from ESP to AFFINA Message processor -->
+    <int:channel id="toCardSetupResponseChannel"/>
+    <int:transformer input-channel="toCardSetupResponseChannel" ref="cardSetupResponseHandler"
+                     output-channel="progressChannel"/>
+
+    <int:channel id="toStageScriptResponseChannel"/>
+    <int:transformer input-channel="toStageScriptResponseChannel" ref="stageScriptResponseHandler"
+                     output-channel="progressChannel"/>
+
+
+    <!--###################### MESSAGE RECIPIENTS ############################################-->
+
+    <!-- Msg to SEM - handles deploy service reponse. Here we need to send a msg to both sides. -->
+    <int:channel id="toRecipientListSemChannel"/>
+    <int:recipient-list-router input-channel="toRecipientListSemChannel">
+        <int:recipient channel="toSemMarshallerChannel"/>
+        <int:recipient channel="progressChannel"/>
+    </int:recipient-list-router>
+
+
+    <!--###################### OTEHRS ############################################-->
+
+    <!-- Deploy Service Response -->
+    <!-- 
+	<int:channel id="toEndServiceResponseTransformer" />
+    <int:channel id="toBureauReturnTransformer" />
+
+    <int:transformer input-channel="toEndServiceResponseTransformer" ref="endServiceResponseTransformer" output-channel="fromEspToSemPCIChannel" />
+
+    <bean id="endServiceResponseTransformer" class="uk.co.openaspect.mq.handler.EndServiceResponseTransformer" />
+
+    <int:transformer input-channel="toBureauReturnTransformer" ref="bureauReturnTransformer" output-channel="toAffinaMarshallerChannel" />
+
+    <bean id="bureauReturnTransformer" class="uk.co.openaspect.mq.handler.BureauReturnTransformer" />
+	-->
+    <!--###################### LOGGINGS ############################################-->
+
+    <int:logging-channel-adapter id="logger" level="DEBUG" log-full-message="true"/>
+    <int:wire-tap channel="logger"/>
+
+</beans>

@@ -1,0 +1,88 @@
+<beans   xmlns="http://www.springframework.org/schema/beans"
+      xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:spi="http://www.springframework.org/schema/integration"
+      xmlns:jee="http://www.springframework.org/schema/jee"
+      xmlns:util="http://www.springframework.org/schema/util"
+      xmlns:context="http://www.springframework.org/schema/context"
+      xmlns:spi-jms="http://www.springframework.org/schema/integration/jms"
+      xmlns:spi-xml="http://www.springframework.org/schema/integration/xml"
+      xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+							http://www.springframework.org/schema/integration http://www.springframework.org/schema/integration/spring-integration-2.0.xsd 
+							http://www.springframework.org/schema/integration/jms http://www.springframework.org/schema/integration/jms/spring-integration-jms-2.0.xsd 
+							http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-3.0.xsd http://www.springframework.org/schema/integration/xml 
+							http://www.springframework.org/schema/integration/xml/spring-integration-xml-2.0.xsd http://www.springframework.org/schema/jee 
+							http://www.springframework.org/schema/jee/spring-jee-3.0.xsd http://www.springframework.org/schema/context 
+							http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+							
+<!-- http://www.atomikos.com/Documentation/TwoPhaseCommitWithTomcatSpringJMSAndJDBC -->							
+							
+   <spi:channel id="inputChannel"/>
+   <spi:channel id="outputChannel"/>
+
+   <!-- Configure JTA transaction manager -->
+   <bean id="AtomikosTransactionManager" class="com.atomikos.icatch.jta.J2eeTransactionManager"/>
+   <bean id="AtomikosUserTransaction" class="com.atomikos.icatch.jta.J2eeUserTransaction"/>
+   <bean id="transactionManager" class="org.springframework.transaction.jta.JtaTransactionManager">
+      <property name="transactionManager" ref="AtomikosTransactionManager"/>
+      <property name="userTransaction" ref="AtomikosUserTransaction"/>
+   </bean>
+
+   <!-- JMS Input Endpoint -->
+   <bean id="defaultListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+      <property name="receiveTimeout" value="10000"/>
+      <property name="connectionFactory" ref="connectionFactory"/>
+      <property name="destination" ref="inputQueueDestination"/>
+      <property name="transactionManager" ref="transactionManager"/>
+      <property name="sessionTransacted" value="true"/>
+      <property name="sessionAcknowledgeMode" value="0"/>
+   </bean>
+   <bean id="jmsInput" class="org.springframework.integration.jms.JmsMessageDrivenEndpoint">
+      <constructor-arg ref="defaultListenerContainer"/>
+      <constructor-arg ref="messageListener"/>
+   </bean>
+   <bean id="messageListener" class="com.westlb.traderouter.jms.listener.ChannelPublishingJmsMessageListener">
+      <property name="requestChannel" ref="inputChannel"/>
+      <property name="expectReply" value="false"/>
+   </bean>
+
+   <!-- JDBC Operation -->
+   <bean id="saveMessage" class="SaveMessage">
+      <property name="dataSource" ref="trdrDataSource"/>
+   </bean>
+   <spi:transformer id="saveMessageTransformer" ref="saveMessage" input-channel="inputChannel" output-channel="outputChannel"/>
+
+   <!-- JMS Output Endpoint -->
+   <spi-jms:outbound-channel-adapter id="outboundChannelAdapter" channel="outputChannel" jms-template="jmsProducerTemplate"/>
+
+   <bean id="jmsOutputTemplate" class="org.springframework.jms.core.JmsTemplate">
+      <property name="connectionFactory" ref="connectionFactory"/>
+      <property name="defaultDestination" ref="outputQueueDestination"/>
+      <property name="deliveryPersistent" value="true"/>
+      <property name="sessionTransacted" value="true"/>
+      <property name="sessionAcknowledgeMode" value="0"/>
+   </bean>
+
+   <!-- JDBC Configuration -->
+   <!-- Get database driver XA properties from file -->
+   <util:properties id="jdbcConfiguration" location="classpath:jdbcconfiguration.properties"/>
+   <!-- XA Pooled DataSource -->
+   <bean id="trdrDataSource" class="com.atomikos.jdbc.AtomikosDataSourceBean" init-method="init" destroy-method="close">
+      <property name="uniqueResourceName" value="DokaDataSourceTransaction"/>
+      <property name="xaDataSourceClassName" value="org.apache.derby.jdbc.EmbeddedXADataSource40"/>
+      <property name="xaProperties" ref="jdbcConfiguration"/>
+      <property name="testQuery" value="values(1)"/>
+   </bean>
+
+   <!-- JMS Configuration -->
+   <!-- Connection Pool -->
+   <bean id="connectionFactory" class="com.atomikos.jms.AtomikosConnectionFactoryBean" init-method="init" destroy-method="close">
+      <property name="uniqueResourceName" value="ConnectionTransaction"/>
+      <property name="xaConnectionFactory" ref="xaQueueConnectionFactory"/>
+   </bean>
+   <!-- Queue Manager Resources -->
+    <jee:jndi-lookup id="xaQueueConnectionFactory" jndi-name="java:comp/env/jms/XAQueueConnectionFactory" resource-ref="true"/>
+    <!-- Queue Resources -->
+    <jee:jndi-lookup id="inputQueueDestination" jndi-name="java:comp/env/jms/InputQueue" resource-ref="true"/>
+    <jee:jndi-lookup id="outputQueueDestination" jndi-name="java:comp/env/jms/OutputQueue" resource-ref="true"/>
+</beans>

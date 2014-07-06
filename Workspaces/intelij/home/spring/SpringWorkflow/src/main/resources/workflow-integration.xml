@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:si="http://www.springframework.org/schema/integration"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd 
+			http://www.springframework.org/schema/integration
+			http://www.springframework.org/schema/integration/spring-integration.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+
+		">
+
+    <!--context:property-placeholder 	location="classpath:/META-INF/spring/spring-integration.properties" /-->
+
+    <context:property-placeholder location="spring-integration.properties"/>
+
+    <!--si:channel id="inboundPollerChannel" /-->
+    <si:inbound-channel-adapter id="cronProducer" expression="'cronTest'" channel="toJobSelectorChannel">
+        <si:poller cron="${pinfeedback.cron.command}"/>
+    </si:inbound-channel-adapter>
+
+
+    <si:channel id="toJobSelectorChannel"/>
+    <si:splitter id="JobSelectorSplitter" input-channel="toJobSelectorChannel"
+                 ref="jobSelector" output-channel="toBatchProcessorChannel"/>
+
+    <si:channel id="toBatchProcessorChannel"/>
+    <si:splitter id="BatchProcessorSplitter" input-channel="toBatchProcessorChannel"
+                 ref="batchProcessor" output-channel="destinationChannel"/>
+
+    <si:channel id="destinationChannel"/>
+    <si:service-activator input-channel="destinationChannel"
+                          method="process"
+                          ref="endProcessor"/>
+
+    <!--   -->
+
+
+    <bean id="jobSelector" class="com.wakkir.spring.process.JobSelector"/>
+    <bean id="batchProcessor" class="com.wakkir.spring.process.BatchProcessor"/>
+    <bean id="endProcessor" class="com.wakkir.spring.process.EndProcessor"/>
+
+</beans>

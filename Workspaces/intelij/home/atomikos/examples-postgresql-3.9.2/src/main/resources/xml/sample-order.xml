@@ -1,0 +1,8 @@
+<com.atomikos.demo.publisher.Batch>
+	<count>10</count>
+	<order>
+		<productId>DEV-TICKET</productId>
+		<quantity>1</quantity>
+		<productName>Atomikos development support ticket</productName>
+	</order>
+</com.atomikos.demo.publisher.Batch>

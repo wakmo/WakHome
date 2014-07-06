@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+<xs:include schemaLocation="CardSetupResponse.xsd"/>
+<xs:include schemaLocation="ScriptStatusResponse.xsd"/>
+<xs:include schemaLocation="StageScriptResponse.xsd"/>
+<!-- file:/E:/Wakkir/workspaces/Github/W3Repo/Workspaces/intelij/home/mytest/MyTest/lib/esp-interface-gen-2.11.jar!/net/aconite/affina/espinterface/xmlmapping/sem/ -->
+</xs:schema>

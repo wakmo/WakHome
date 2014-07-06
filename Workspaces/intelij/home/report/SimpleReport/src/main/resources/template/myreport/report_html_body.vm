@@ -1,0 +1,58 @@
+#set($varTotalColumns = ${TOTAL_COLUMNS})
+#set($varTotalCounts = ${TOTAL_COUNTS})
+##
+#set($varTitles = ${titles})
+#set($varMetaData = ${meta_data})
+#set($varFields = ${varMetaData.fields})
+#set($varColumns = ${columns})
+#set($varDataRows = ${data_rows})
+#set($varFooters = ${footers})
+##
+#set($varTotals = ${totals})
+#set($varAllTotals = $varTotals.get("AllTotal"))
+##
+##-------------------------------------------
+<html>
+<head></head>
+<body>
+##======================================
+<table border="1" cellpadding="0" cellspacing="0" width="964px">
+## --------------------------------
+#foreach($title in $varTitles)
+<tr>
+   <td colspan="${varTotalColumns}">${title}</td>
+</tr>
+#end
+## --------------------------------
+<tr>
+#foreach($column in $varColumns)
+  <th  align="right" colspan="${column.columns.size()}">${column.header}</th>
+#end
+</tr>
+## --------------------------------
+#foreach($data_row in $varDataRows)
+<tr>
+#foreach($field in $varFields)
+#set($varColumn = ${field.column})
+  <td align="${varColumn.align}">$data_row.get($field.mapping)</td>
+#end
+</tr>
+#end
+## --------------------------------
+<tr>
+#foreach($field in $varFields)
+#set($varColumn = ${field.column})
+  <td align="${varColumn.align}">#if(${varColumn.dataType}=="group")AllTotal#else$!varAllTotals.get($field.mapping)#end</td>
+#end
+</tr>
+## --------------------------------
+#foreach($footer in $varFooters)
+<tr>
+  <td colspan="${varTotalColumns}">${footer}</td>
+</tr>
+#end
+## --------------------------------
+</table>
+##======================================
+</body>
+</html>

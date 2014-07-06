@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ScriptStatusResponse>
+    <TrackingReference>235235235235</TrackingReference>
+    <status>STATUS_OK</status>
+</ScriptStatusResponse>

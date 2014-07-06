@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+	<!--  Appender definitions -->
+    <appender name="consoleAppender" class="org.apache.log4j.ConsoleAppender">
+        <param name="Threshold" value="TRACE" />
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d  %-5p  [%c{1}] %m %n" />
+        </layout>
+    </appender>
+
+    <appender name="fileAppender"  class="org.apache.log4j.RollingFileAppender">
+        <param name="Threshold" value="INFO" />
+        <param name="file" value="C:\\Wakkir\\Workspaces\\intelij\\AppHome\\logs\\report\\other.log"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d  %-5p  [%c{1}] %m %n" />
+        </layout>
+    </appender>
+
+
+	<appender name="ReportFileAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="Threshold" value="TRACE" />
+		<param name="file" value="C:\\Wakkir\\Workspaces\\intelij\\AppHome\\logs\\report\\report.log"/>
+		<param name="MaxFileSize" value="1024KB"/>
+		<param name="MaxBackupIndex" value="20"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="%d %-5p %c - %m%n"/>
+		</layout>
+	</appender>
+
+
+    <appender name="JsonFileAppender" class="org.apache.log4j.RollingFileAppender">
+        <param name="Threshold" value="INFO" />
+        <param name="file" value="C:\\Wakkir\\Workspaces\\intelij\\AppHome\\logs\\report\\json.log"/>
+        <param name="MaxFileSize" value="1024KB"/>
+        <param name="MaxBackupIndex" value="20"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p %c - %m%n"/>
+        </layout>
+    </appender>
+
+	<!-- Logger definitions -->
+
+	<logger name="com.wakkir.report" additivity="false">
+		<!--level value="info"/-->
+		<appender-ref ref="ReportFileAppender" />
+        <appender-ref ref="consoleAppender" />
+	</logger>
+
+
+	<logger name="org.apache.commons.beanutils.converters" additivity="false">
+		<level value="info" />
+		<appender-ref ref="JsonFileAppender" />
+	</logger>
+
+	<root>
+		<priority value ="debug" />
+		<appender-ref ref="consoleAppender" />
+        <appender-ref ref="fileAppender" />
+	</root>
+
+</log4j:configuration>

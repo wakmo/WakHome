@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+
+    <bean id="WrapperService" class="net.aconite.wrapper.service.AconiteWrapperService">
+        <property name="serverSocketPort" value="6660" />
+        <property name="serverPollRate" value="1000" />
+    </bean>
+
+    <bean id="StartServiceHandler"  class="net.aconite.wrapper.service.StartServiceHandler"/>
+
+    <bean id="StopServiceHandler"   class="net.aconite.wrapper.service.StopServiceHandler"/>
+
+
+</beans>

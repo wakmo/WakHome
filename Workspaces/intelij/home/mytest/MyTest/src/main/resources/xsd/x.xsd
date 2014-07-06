@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+<xs:include schemaLocation="/E:/Wakkir/workspaces/Github/W3Repo/Workspaces/intelij/home/mytest/MyTest/target/classes/xsd/net/aconite/affina/espinterface/xmlmapping/sem/ScriptStatusResponse.xsd"/>
+<xs:include schemaLocation="/E:/Wakkir/workspaces/Github/W3Repo/Workspaces/intelij/home/mytest/MyTest/target/classes/xsd/net/aconite/affina/espinterface/xmlmapping/sem/CardSetupResponse.xsd"/>
+<xs:include schemaLocation="/E:/Wakkir/workspaces/Github/W3Repo/Workspaces/intelij/home/mytest/MyTest/target/classes/xsd/net/aconite/affina/espinterface/xmlmapping/sem/StageScriptResponse.xsd"/>
+</xs:schema>

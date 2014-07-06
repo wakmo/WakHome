@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>net.aconite.affina</groupId>
+        <artifactId>esp-interface-parent</artifactId>
+        <version>2.11</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>esp-interface-web</artifactId>
+    <packaging>war</packaging>
+    <name>ESPInterfaceWeb</name>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>net.aconite.affina</groupId>
+            <artifactId>esp-interface-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <finalName>${project.artifactId}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.0.2</version>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+
+            <!-- Gather all the necessary files for a distribution -->
+            <plugin>
+                <!-- Unpack necessary resources into build area -->
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <!-- Unpack the required resource files into target -->
+                    <execution>
+                        <id>unpack-resources</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>net.aconite.affina</groupId>
+                                    <artifactId>esp-interface-core</artifactId>
+                                    <type>jar</type>
+                                    <outputDirectory>${project.build.directory}/${project.artifactId}/WEB-INF/classes
+                                    </outputDirectory>
+                                    <includes>
+                                        META-INF/spring/*.xml,
+                                        META-INF/templates/*.vm
+                                    </includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.4</version>
+                <configuration>
+                    <!--
+                      Exclude JCL and LOG4J since all logging should go through SLF4J.
+                      Note that we're excluding log4j-<version>.jar but keeping
+                      log4j-over-slf4j-<version>.jar
+                      %regex[WEB-INF/lib/log4j-(?!over-slf4j).*.jar]
+                    -->
+                    <packagingExcludes>
+						WEB-INF/lib/admin-client-*.jar,
+                        WEB-INF/lib/ant-*.jar,
+                        WEB-INF/lib/comm-*.jar,
+						WEB-INF/lib/datasource.oracle*.jar,
+                        WEB-INF/lib/dhbcore*.jar,
+                        WEB-INF/lib/fscontext*.jar,
+                        WEB-INF/lib/iaik_jce*.jar,
+						WEB-INF/lib/IBM.EJB.THIN-*.jar,
+                        WEB-INF/lib/jms-*.jar,
+                        WEB-INF/lib/mq-*.jar,
+						WEB-INF/lib/mq.headers-*.jar,
+						WEB-INF/lib/mq.jmqi-*.jar,
+                        WEB-INF/lib/mqjms-*.jar, 
+                        WEB-INF/lib/ojdbc*.jar,
+                        WEB-INF/lib/runtime-*.jar 
+                    </packagingExcludes>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+</project>

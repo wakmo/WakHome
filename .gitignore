@@ -1,0 +1,12 @@
+target/
+*.iml
+*.ipr
+*.iws
+*.idea/
+*/dependency-reduced-pom.xml
+logs/
+AppHome/
+.classpath
+.project
+.springBeans
+projectFilesBackup/

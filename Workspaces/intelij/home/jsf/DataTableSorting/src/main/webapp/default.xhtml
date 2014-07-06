@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:c="http://java.sun.com/jsp/jstl/core"
+        >
+<h:head>
+    <h:outputStylesheet library="css" name="table-style.css"  />
+</h:head>
+<h:body>
+
+    <h1>JSF 2 dataTable sorting example</h1>
+    <h:form>
+        <h:dataTable value="#{mymbean.tableData}" var="myrow"
+                     styleClass="order-table"
+                     headerClass="order-table-header"
+                     rowClasses="order-table-odd-row,order-table-even-row"
+                >
+            <h:column>
+                <f:facet name="header">
+                    <h:commandLink action="#{mymbean.checkAll}">
+                        Check
+                    </h:commandLink>
+                </f:facet>
+                <h:selectBooleanCheckbox value="#{myrow.selected}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:commandLink action="#{mymbean.sortBy}">
+                        <f:setPropertyActionListener target="#{mymbean.sort}" value="orderNo" />
+                        Order No
+                    </h:commandLink>
+                </f:facet>
+                <h:inputText value="#{myrow.orderNo}" size="10" rendered="#{myrow.editable}" />
+                <h:outputText value="#{myrow.orderNo}" rendered="#{not myrow.editable}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:commandLink action="#{mymbean.sortBy}">
+                        <f:setPropertyActionListener target="#{mymbean.sort}" value="productName" />
+                        Product Name
+                    </h:commandLink>
+                </f:facet>
+
+                <h:inputText value="#{myrow.productName}" size="10" rendered="#{myrow.editable}" />
+                <h:outputText value="#{myrow.productName}" rendered="#{not myrow.editable}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:commandLink action="#{mymbean.sortBy}">
+                        <f:setPropertyActionListener target="#{mymbean.sort}" value="price" />
+                        Price
+                    </h:commandLink>
+                </f:facet>
+                <h:inputText value="#{myrow.price}" size="10" rendered="#{myrow.editable}" />
+                <h:outputText value="#{myrow.price}" rendered="#{not myrow.editable}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">
+                    <h:commandLink action="#{mymbean.sortBy}">
+                        <f:setPropertyActionListener target="#{mymbean.sort}" value="quantity" />
+                        Quantity
+                    </h:commandLink>
+                </f:facet>
+                <h:inputText value="#{myrow.qty}" size="10" rendered="#{myrow.editable}" />
+                <h:outputText value="#{myrow.qty}" rendered="#{not myrow.editable}" />
+            </h:column>
+
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <h:commandLink value="Delete"  action="#{mymbean.deleteAction}" >
+                    <f:setPropertyActionListener target="#{mymbean.rowData}" value="#{myrow}" />
+                </h:commandLink>
+                &#160;
+                <h:commandLink value="Edit"  action="#{mymbean.editAction}" rendered="#{not myrow.editable}">
+                    <f:setPropertyActionListener target="#{mymbean.rowData}" value="#{myrow}" />
+                </h:commandLink>
+                <h:commandLink value="Save"  action="#{mymbean.saveAction}" rendered="#{myrow.editable}">
+                    <f:setPropertyActionListener target="#{mymbean.rowData}" value="#{myrow}" />
+                </h:commandLink>
+            </h:column>
+
+        </h:dataTable>
+
+        <h:commandButton value="&lt;" action="#{mymbean.paginator.prev}"/>
+        <h:outputText value=" page #{mymbean.paginator.pageIndex}  of  #{mymbean.paginator.pages} "/>
+        <h:commandButton value="&gt;" action="#{mymbean.paginator.next}"/>
+        &#160;&#160;&#160;&#160;
+        <h:outputText value=" Displaying topics #{mymbean.paginator.fromIndex} - #{mymbean.paginator.toIndex} of #{mymbean.paginator.recordsTotal}"/>
+        <h:inputHidden value="#{mymbean.paginator.pageIndex}"/>
+        <h:inputHidden value="#{mymbean.checkAllIndex}"/>
+        <br/><br/>
+        <h:commandButton value="Submit Changes" action="#{mymbean.submitAction}" />
+
+
+    </h:form>
+
+</h:body>
+</html>

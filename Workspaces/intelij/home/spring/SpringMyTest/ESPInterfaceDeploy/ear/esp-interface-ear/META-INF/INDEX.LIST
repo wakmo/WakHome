@@ -1,0 +1,9 @@
+JarIndex-Version: 1.0
+
+esp-interface-ear.ear
+META-INF
+META-INF/maven
+META-INF/maven/net.aconite.affina
+META-INF/maven/net.aconite.affina/esp-interface-ear
+esp-interface-web.war
+

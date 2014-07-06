@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 sp1 (x64) (http://www.altova.com) by Ben Westlake (Aconite Technology) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified"
+           version="1.0">
+    <xs:include schemaLocation="CommonData.xsd"/>
+    <xs:element name="CardSetupResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="TrackingReference" type="TrackingReferenceType"/>
+                <xs:element name="status" type="StatusType">
+                    <xs:annotation>
+                        <xs:documentation>Indicates if the action was successful or not</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="error" type="ErrorType" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>It is only present if the status contains 'ERROR'</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

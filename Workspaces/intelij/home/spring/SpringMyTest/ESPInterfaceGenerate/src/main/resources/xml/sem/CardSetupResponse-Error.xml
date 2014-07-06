@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CardSetupResponse>
+    <TrackingReference>4636346</TrackingReference>
+    <status>ERROR</status>
+    <error ErrorCode="-34324" Description="Error Error!!!" Data="Hmmm Error"/>
+</CardSetupResponse>

@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.atomikos</groupId>
+    <artifactId>service-tracker</artifactId>
+    <version>3.9.2</version>
+  </parent>
+  <artifactId>service-tracker-osgi-example-db-axt</artifactId>
+  <properties>
+		<atomikos-version>3.9.2</atomikos-version>
+	</properties>
+  <dependencies>
+		<dependency>
+			<groupId>com.atomikos</groupId>
+			<artifactId>transactions-osgi</artifactId>
+			<version>${atomikos-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.atomikos</groupId>
+			<artifactId>transactions-jmx</artifactId>
+			<version>3.9.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.derby</groupId>
+			<artifactId>derby</artifactId>
+			<version>10.8.1.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.atomikos</groupId>
+			<artifactId>transactions-jdbc</artifactId>
+			<version>${atomikos-version}</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+</project>

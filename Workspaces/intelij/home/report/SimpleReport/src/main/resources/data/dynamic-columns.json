@@ -1,0 +1,30 @@
+{
+	"ResultData" : 
+	{
+		"GridData" : 
+		[
+			{
+				"RecordNum" : 1
+			}, 
+			{
+				"RecordNum" : 2
+			}
+		],
+		"columnInfo" : 
+		{
+			"fields" : 
+			[
+				{
+					"header" : "Record Number",
+					"dataIndex" : "RecordNum",
+					"width" : 100,
+					"sortable" : true,
+					"hidden" : false
+				}
+			],
+			"root" : "ResultData",
+			"totalProperty" : 7,
+			"id" : "id"
+		}
+	}
+}

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+						   http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/context
+						   http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <import resource="workflow-integration.xml"/>
+
+	<context:annotation-config/>
+    <context:component-scan base-package="com.wakkir.spring.service"/>
+    <context:component-scan base-package="com.wakkir.spring.process"/>
+    <context:component-scan base-package="com.wakkir.spring.action"/>
+
+
+    <bean id='standardWorkflow'  class='com.wakkir.spring.engine.StandardWorkflow'>
+        <property name='workflowActions'>
+            <map>
+                <!-- <entry key='<CID>_action'><ref bean='<CID>_action'/></entry>-->
+                <!-- OEVBS -->
+                <entry key='action1_action'>
+                    <ref bean='action1_action' />
+                </entry>
+                <!-- PVN -->
+                <entry key='action2_action'>
+                    <ref bean='action2_action' />
+                </entry>
+                <!-- WPV -->
+                <entry key='action3_action'>
+                    <ref bean='action3_action' />
+                </entry>
+            </map>
+        </property>
+    </bean>
+
+    <bean id='action1_action' class='java.util.ArrayList'>
+        <constructor-arg>
+            <!-- List of Actions -->
+            <list value-type='com.wakkir.spring.service.IWorkflowAction' >
+                <ref local='readFilterRecordAction'/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id='action2_action' class='java.util.ArrayList'>
+        <constructor-arg>
+            <!-- List of Actions -->
+            <list value-type='com.wakkir.spring.service.IWorkflowAction' >
+                <ref local='createDBRecordAction'/>
+                <ref local='sendRequestMessageAction'/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id='action3_action' class='java.util.ArrayList'>
+        <constructor-arg>
+            <!-- List of Actions -->
+            <list value-type='com.wakkir.spring.service.IWorkflowAction' >
+                <ref local='readFilterRecordAction'/>
+                <ref local='createDBRecordAction'/>
+                <ref bean='sendRequestMessageAction'/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="readFilterRecordAction" class="com.wakkir.spring.action.ReadFilterRecordAction"/>
+    <bean id="createDBRecordAction" class="com.wakkir.spring.action.CreateDBRecordAction"/>
+    <bean id="sendRequestMessageAction" class="com.wakkir.spring.action.SendRequestMessageAction"/>
+
+</beans>

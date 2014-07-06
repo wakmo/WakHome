@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 sp1 (x64) (http://www.altova.com) by Ben Westlake (Aconite Technology) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified"
+           version="1.0">
+    <xs:include schemaLocation="CommonData.xsd"/>
+    <xs:element name="scriptStatusUpdate">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="TrackingReference" type="TrackingReferenceType"/>
+                <xs:element name="Card" type="CardType"/>
+                <xs:element name="BusinessFunction">
+                    <xs:complexType>
+                        <xs:attribute name="FunctionName" type="xs:string" use="required">
+                            <xs:annotation>
+                                <xs:documentation>The Configured Name for the Business Function within SEM.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="ScriptOrder" type="ScriptOrderType"/>
+                <xs:element name="deletionDetails" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="deletedDate" type="JavaDateType" use="required">
+                            <xs:annotation>
+                                <xs:documentation>Date EMV Script was deleted.</xs:documentation>
+                            </xs:annotation>
+                        </xs:attribute>
+                        <xs:attribute name="deletionReason" use="required">
+                            <xs:annotation>
+                                <xs:documentation>Reason script was deleted</xs:documentation>
+                            </xs:annotation>
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:maxLength value="100"/>
+                                    <xs:minLength value="0"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="transactionDetails" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="atc" type="xs:string" use="required"/>
+                        <xs:attribute name="transactionDate" type="JavaDateType" use="required"/>
+                        <xs:attribute name="scriptBytes" type="xs:hexBinary" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="deviceDetails" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="deviceType" type="xs:integer" use="required"/>
+                        <xs:attribute name="deviceCapabilities" use="optional"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="scriptDeliveryStatus" minOccurs="0">
+                    <xs:complexType>
+                        <xs:attribute name="deliveryStatus" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="ScriptDataItem" type="NVPType"/>
+                </xs:sequence>
+            </xs:sequence>
+            <xs:attribute name="source" type="xs:string" use="required"/>
+            <xs:attribute name="target" type="xs:string" use="required"/>
+            <xs:attribute name="datePublished" type="JavaDateType" use="required"/>
+            <xs:attribute name="scriptUpdateStatus" type="ScriptStatusUpdateType" use="required"/>
+            <xs:attribute name="scriptSequenceNumber" type="xs:nonNegativeInteger" use="required"/>
+            <xs:attribute name="autoRetryCount" type="xs:nonNegativeInteger" use="required"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:simpleType name="ScriptStatusUpdateType">
+        <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="STAGED"/>
+            <xs:enumeration value="DELETED"/>
+            <xs:enumeration value="SENT"/>
+            <xs:enumeration value="DELIVERED"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

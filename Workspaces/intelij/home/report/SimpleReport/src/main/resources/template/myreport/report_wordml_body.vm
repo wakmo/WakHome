@@ -1,0 +1,238 @@
+#set($varTotalColumns = ${TOTAL_COLUMNS})
+#set($varTotalCounts = ${TOTAL_COUNTS})
+##
+#set($varTitles = ${titles})
+#set($varMetaData = ${meta_data})
+#set($varFields = ${varMetaData.fields})
+#set($varColumns = ${columns})
+#set($varDataRows = ${data_rows})
+#set($varFooters = ${footers})
+##
+#set($varTotals = ${totals})
+#set($varAllTotals = $varTotals.get("AllTotal"))
+##
+##-------------------------------------------
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?mso-application progid="Word.Document"?>
+<w:wordDocument xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:sl="http://schemas.microsoft.com/schemaLibrary/2003/core" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:wsp="http://schemas.microsoft.com/office/word/2003/wordml/sp2" w:macrosPresent="no" w:embeddedObjPresent="no" w:ocxPresent="no" xml:space="preserve">
+	<w:ignoreElements w:val="http://schemas.microsoft.com/office/word/2003/wordml/sp2"/>
+	<o:DocumentProperties>
+		<o:Title>Report</o:Title>
+		<o:Author>Wakkir</o:Author>
+		<o:LastAuthor>Wakkir</o:LastAuthor>
+		<o:Company>Wakkir</o:Company>
+		<o:Version>1.0000</o:Version>
+	</o:DocumentProperties>
+	<w:fonts>
+		<w:defaultFonts w:ascii="Arial" w:fareast="Arial" w:h-ansi="Arial" w:cs="Arial"/>
+	</w:fonts>
+	<w:docPr>
+		<w:view w:val="print"/>
+		<w:zoom w:percent="100"/>
+	</w:docPr>
+	<w:body>
+		<wx:sect>
+##======================================
+##--------------------------------------
+<w:tbl xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml" xmlns:sl="http://schemas.microsoft.com/schemaLibrary/2003/core" xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:wsp="http://schemas.microsoft.com/office/word/2003/wordml/sp2" xmlns:utils="http://www.oracle.com/XSL/Transform/java/com.kurtosys.reporter.utils.XMLUtils" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:ksys="http://whatever" xmlns:w10="urn:schemas-microsoft-com:office:word">
+   <w:tblPr>
+##    <w:tblW w:type="auto" w:w="0"/>
+	  <w:tblW w:w="5000" w:type="pct"/>
+##    <w:tblLayout w:type="Fixed"/>
+      <w:tblCellMar>
+         <w:top w:type="dxa" w:w="17"/>
+         <w:right w:type="dxa" w:w="17"/>
+         <w:left w:type="dxa" w:w="17"/>
+         <w:bottom w:type="dxa" w:w="17"/>
+      </w:tblCellMar>
+   </w:tblPr>
+## ------adding title--------------------------
+#foreach($title in $varTitles)
+	<w:tr>
+      <w:trPr>
+ ##        <w:tblHeader/>
+         <w:trHeight w:h-rule="at least" w:val="170"/>
+      </w:trPr>
+	  
+      <w:tc>
+         <w:tcPr>
+            <w:tcBorders/>
+            <w:tcW w:type="dxa" w:w="340"/>
+            <w:gridSpan w:val="${varTotalColumns}"/>
+            <w:shd w:color="auto" w:fill="DEDEDE" w:val="clear"/>
+            <w:tcMar/>
+            <w:vAlign w:val="center"/>
+         </w:tcPr>
+         <w:p>
+            <w:pPr>
+ ##              <w:keepNext/>
+               <w:jc w:val="center"/>
+            </w:pPr>            
+            <w:r>
+               <w:rPr>
+                  <w:rFonts w:ascii="HelveticaNeueLT Std Med Cn" w:cs="HelveticaNeueLT Std Med Cn" w:h-ansi="HelveticaNeueLT Std Med Cn"/>
+                  <wx:font wx:val="HelveticaNeueLT Std Med Cn"/>
+                  <w:sz w:val="16"/>
+                  <w:sz-cs w:val="16"/>
+                  <w:color w:val="333333"/>
+               </w:rPr>
+               <w:t>${title}</w:t>
+            </w:r>            
+         </w:p>
+      </w:tc>
+	</w:tr>
+#end
+## -------adding column header-------------------------
+<w:tr>
+  <w:trPr>
+	 <w:tblHeader/>
+	 <w:trHeight w:h-rule="at least" w:val="170"/>
+  </w:trPr>
+#foreach($column in $varColumns)
+	<w:tc>
+        <w:tcPr>
+            <w:tcBorders/>
+##          <w:tcW w:type="dxa" w:w="340"/>
+			<w:tcW w:w="0" w:type="pct"/>
+            <w:gridSpan w:val="${column.columns.size()}"/>
+            <w:shd w:color="auto" w:fill="DEDEDE" w:val="clear"/>
+            <w:tcMar/>
+            <w:vAlign w:val="center"/>
+         </w:tcPr>
+         <w:p>
+            <w:pPr>               
+               <w:jc w:val="center"/>
+            </w:pPr>            
+            <w:r>
+               <w:rPr>
+                  <w:rFonts w:ascii="HelveticaNeueLT Std Med Cn" w:cs="HelveticaNeueLT Std Med Cn" w:h-ansi="HelveticaNeueLT Std Med Cn"/>
+                  <wx:font wx:val="HelveticaNeueLT Std Med Cn"/>
+                  <w:sz w:val="16"/>
+                  <w:sz-cs w:val="16"/>
+                  <w:color w:val="333333"/>
+               </w:rPr>
+               <w:t>${column.header}</w:t>
+            </w:r>            
+         </w:p>
+    </w:tc>
+#end
+</w:tr>
+## -------adding data rows-------------------------
+#foreach($data_row in $varDataRows)
+<w:tr>
+  <w:trPr>	 
+	 <w:trHeight w:h-rule="at least" w:val="170"/>
+  </w:trPr>
+#foreach($field in $varFields)
+#set($varColumn = ${field.column})
+  <w:tc>
+         <w:tcPr>
+            <w:tcBorders/>
+##          <w:tcW w:type="dxa" w:w="340"/>
+			<w:tcW w:w="0" w:type="pct"/>
+            <w:gridSpan w:val="1"/>
+            <w:shd w:color="auto" w:fill="DEDEDE" w:val="clear"/>
+            <w:tcMar/>
+            <w:vAlign w:val="${varColumn.align}"/>
+         </w:tcPr>
+         <w:p>
+            <w:pPr>               
+               <w:jc w:val="${varColumn.align}"/>
+            </w:pPr>            
+            <w:r>
+               <w:rPr>
+                  <w:rFonts w:ascii="HelveticaNeueLT Std Med Cn" w:cs="HelveticaNeueLT Std Med Cn" w:h-ansi="HelveticaNeueLT Std Med Cn"/>
+                  <wx:font wx:val="HelveticaNeueLT Std Med Cn"/>
+                  <w:sz w:val="16"/>
+                  <w:sz-cs w:val="16"/>
+                  <w:color w:val="333333"/>
+               </w:rPr>
+               <w:t>$data_row.get($field.mapping)</w:t>
+            </w:r>            
+         </w:p>
+      </w:tc>
+#end
+</w:tr>
+#end
+## ---------adding total-----------------------
+<w:tr>
+  <w:trPr>	 
+	 <w:trHeight w:h-rule="at least" w:val="170"/>
+  </w:trPr>
+#foreach($field in $varFields)
+#set($varColumn = ${field.column})
+  <w:tc>
+         <w:tcPr>
+            <w:tcBorders/>
+##          <w:tcW w:type="dxa" w:w="340"/>
+			<w:tcW w:w="833" w:type="pct"/>
+            <w:gridSpan w:val="1"/>
+            <w:shd w:color="auto" w:fill="DEDEDE" w:val="clear"/>
+            <w:tcMar/>
+            <w:vAlign w:val="${varColumn.align}"/>
+         </w:tcPr>
+         <w:p>
+            <w:pPr>               
+               <w:jc w:val="${varColumn.align}"/>
+            </w:pPr>            
+            <w:r>
+               <w:rPr>
+                  <w:rFonts w:ascii="HelveticaNeueLT Std Med Cn" w:cs="HelveticaNeueLT Std Med Cn" w:h-ansi="HelveticaNeueLT Std Med Cn"/>
+                  <wx:font wx:val="HelveticaNeueLT Std Med Cn"/>
+                  <w:sz w:val="16"/>
+                  <w:sz-cs w:val="16"/>
+                  <w:color w:val="333333"/>
+               </w:rPr>
+               <w:t>#if(${varColumn.dataType}=="group")AllTotal#else$!varAllTotals.get($field.mapping)#end</w:t>
+            </w:r>            
+         </w:p>
+      </w:tc>
+#end
+</w:tr>
+## --------adding footer------------------------
+#foreach($footer in $varFooters)
+<w:tr>
+  <w:trPr>	 
+	 <w:trHeight w:h-rule="at least" w:val="170"/>
+  </w:trPr>
+  <w:tc>
+	 <w:tcPr>
+		<w:tcBorders/>
+##		<w:tcW w:type="dxa" w:w="340"/>
+		<w:tcW w:w="5000" w:type="pct"/>
+		<w:gridSpan w:val="${varTotalColumns}"/>
+		<w:shd w:color="auto" w:fill="DEDEDE" w:val="clear"/>
+		<w:tcMar/>
+		<w:vAlign w:val="both"/>
+	 </w:tcPr>
+	 <w:p>
+		<w:pPr>		   
+		   <w:jc w:val="both"/>
+		</w:pPr>            
+		<w:r>
+		   <w:rPr>
+			  <w:rFonts w:ascii="HelveticaNeueLT Std Med Cn" w:cs="HelveticaNeueLT Std Med Cn" w:h-ansi="HelveticaNeueLT Std Med Cn"/>
+			  <wx:font wx:val="HelveticaNeueLT Std Med Cn"/>
+			  <w:sz w:val="16"/>
+			  <w:sz-cs w:val="16"/>
+			  <w:color w:val="333333"/>
+		   </w:rPr>
+		   <w:t>${footer}</w:t>
+		</w:r>            
+	 </w:p>
+  </w:tc>
+</w:tr>
+#end
+   
+</w:tbl>
+##--------------------------------------
+##======================================
+			<w:sectPr>
+				<w:pgSz w:w="11906" w:h="16838" w:code="9"/>
+				<w:pgMar w:top="2268" w:right="284" w:bottom="284" w:left="284" w:header="360" w:footer="451" w:gutter="0"/>
+				<w:cols w:space="708"/>
+				<w:docGrid w:line-pitch="360"/>
+			</w:sectPr>
+		</wx:sect>
+	</w:body>
+</w:wordDocument>

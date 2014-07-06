@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StageScriptRequest xsi:noNamespaceSchemaLocation="StageScriptRequest.xsd"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <TrackingReference>CTH00112M1006492895</TrackingReference>
+    <Card PAN="0129002312" PANSequence="01" ExpirationDate="1385855999999"/>
+    <BusinessFunction FunctionName="Validate Chip"/>
+</StageScriptRequest>

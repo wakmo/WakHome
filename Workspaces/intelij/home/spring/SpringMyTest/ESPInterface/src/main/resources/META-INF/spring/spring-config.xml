@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+						   http://www.springframework.org/schema/beans/spring-beans.xsd
+						   http://www.springframework.org/schema/context
+						   http://www.springframework.org/schema/context/spring-context.xsd">
+
+	
+	<context:annotation-config/>
+    <context:component-scan base-package="net.aconite.affina.espinterface.handler.message"/>
+	<context:component-scan base-package="net.aconite.affina.espinterface.handler.feedback"/>
+	<context:component-scan base-package="net.aconite.affina.espinterface.security"/>
+	<context:component-scan base-package="net.aconite.affina.espinterface.scripting.statusupdate"/>
+	<context:component-scan base-package="net.aconite.affina.espinterface.config"/>
+						   
+    <!-- //////////////////////// -->
+    <bean id="startServiceHandler" class="net.aconite.affina.espinterface.context.StartServiceHandler"/>
+    <bean id="stopServiceHandler" class="net.aconite.affina.espinterface.context.StopServiceHandler"/>
+    <!-- //////////////////////// -->
+
+    <bean id="velocityEngine"
+          class="org.springframework.ui.velocity.VelocityEngineFactoryBean"
+          p:resourceLoaderPath="classpath:/META-INF/templates"
+          p:preferFileSystemAccess="false"/>
+
+    <!-- This Config bean is given access to the Spring ApplicationContext at bootstrap time -->
+    <bean id="contextApplicationContextProvider" class="com.platform7.standardinfrastructure.appconfig.AppConfig"/>
+
+    <!-- MQ Encryption/Decription/PCI rules enforced here--><!-- results in a setAdminEmails(java.util.Properties) call -->
+    <!--
+    <bean id="pciEnforcer" class="net.aconite.affina.espinterface.security.PCIEnforcer">
+        <property name="pciParams">
+            <props>
+                <prop key="administrator">administrator@example.org</prop>
+                <prop key="support">support@example.org</prop>
+                <prop key="development">development@example.org</prop>
+            </props>
+        </property>
+    </bean>
+    -->
+    <!-- MQ Encryption/Decription/PCI rules enforced here-->
+    <bean id="pciEnforcerAffinaEsp" class="net.aconite.affina.espinterface.security.PCIEnforcer">
+        <constructor-arg value="#{appProperties['from.affina.to.esp.pci.doDecrypt']}"/>
+        <constructor-arg value="#{appProperties['from.affina.to.esp.pci.decryptKeyAlias']}"/>
+        <constructor-arg value="#{appProperties['from.esp.to.affina.pci.doEncrypt']}"/>
+        <constructor-arg value="#{appProperties['from.esp.to.affina.pci.encryptKeyAlias']}"/>
+        <constructor-arg value="#{appProperties['esp.encryiption.encoding']}"/>
+    </bean>
+
+    <bean id="pciEnforcerSemEsp" class="net.aconite.affina.espinterface.security.PCIEnforcer">
+        <constructor-arg value="#{appProperties['from.sem.to.esp.pci.doDecrypt']}"/>
+        <constructor-arg value="#{appProperties['from.sem.to.esp.pci.decryptKeyAlias']}"/>
+        <constructor-arg value="#{appProperties['from.esp.to.sem.pci.doEncrypt']}"/>
+        <constructor-arg value="#{appProperties['from.esp.to.sem.pci.encryptKeyAlias']}"/>
+        <constructor-arg value="#{appProperties['esp.encryiption.encoding']}"/>
+    </bean>
+
+    <bean id="pciEnforcerCustServEsp" class="net.aconite.affina.espinterface.security.PCIEnforcer">
+        <constructor-arg value="#{appProperties['from.custserv.to.esp.pci.doDecrypt']}"/>
+        <constructor-arg value="#{appProperties['from.custserv.to.esp.pci.decryptKeyAlias']}"/>
+        <constructor-arg value="#{appProperties['from.esp.to.custserv.pci.doEncrypt']}"/>
+        <constructor-arg value="#{appProperties['from.esp.to.custserv.pci.encryptKeyAlias']}"/>
+        <constructor-arg value="#{appProperties['esp.encryiption.encoding']}"/>
+    </bean>
+
+    <!-- To Handle alerts from AFFINA to ESP here-->
+    <bean id="cardSetupAlertHandler" class="net.aconite.affina.espinterface.handler.message.CardSetupAlertHandler"/>
+    <bean id="stageScriptAlertHandler" class="net.aconite.affina.espinterface.handler.message.StageScriptAlertHandler"/>
+
+    <!-- To Handle Resposne/Request from SEM to ESP here -->
+    <bean id="cardSetupResponseHandler"
+          class="net.aconite.affina.espinterface.handler.message.CardSetupResponseHandler"/>
+    <bean id="stageScriptResponseHandler"
+          class="net.aconite.affina.espinterface.handler.message.StageScriptResponseHandler"/>
+    <bean id="scriptStatusRequestHandler"
+          class="net.aconite.affina.espinterface.handler.message.ScriptStatusRequestHandler"/>
+
+    <!-- To Handle Error and Progress messages here-->
+    <bean id="errorHandler" class="net.aconite.affina.espinterface.handler.feedback.EspErrorHandler"/>
+    <bean id="progressHandler" class="net.aconite.affina.espinterface.handler.feedback.EspProgressHandler">
+        <constructor-arg ref="velocityEngine"/>
+    </bean>
+	
+	
+	<!-- Script status update beans-->	
+<!-- 	<bean id="scriptProcessable" factory-method="getProcessable" class="net.aconite.affina.espinterface.scripting.statusupdate.ScriptUpdateProcessor"/>	
+	<bean id="scriptStatusUpdateEventHandler" class="net.aconite.affina.espinterface.scripting.statusupdate.ScriptStatusUpdateEventHandler">
+        <constructor-arg ref="scriptProcessable"/>
+    </bean> -->
+	
+
+
+    <!-- <bean id="cardSetupRequestSplitter" class="net.aconite.affina.espinterface.spliter.CardSetupRequestSplitter"/> -->
+	
+	
+
+
+</beans>

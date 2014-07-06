@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified"   version="1.0">
+    <xs:simpleType name="ScriptOrderType">
+        <xs:restriction base="xs:positiveInteger"/>
+    </xs:simpleType>
+    <xs:complexType name="HeaderType">
+        <xs:annotation>
+            <xs:documentation>identifies source and target systems</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="source" type="xs:string" use="required"/>
+        <xs:attribute name="target" type="xs:string" use="required"/>
+        <xs:attribute name="datePublished" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="TagType">
+        <xs:annotation>
+            <xs:documentation>identifies an element in tag-name-value form</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="tag" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>The tag of the data item</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>The textual name of the data item</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="value" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>The value of the data item</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="NVPType">
+        <xs:annotation>
+            <xs:documentation>identifies an element in name-value form</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>The textual name of the data item</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="value" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>The value of the data item</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="CardIdentificationType">
+        <xs:annotation>
+            <xs:documentation>Identifies individual card in SCMS</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="CIN" type="xs:string" use="required"/>
+        <xs:attribute name="IIN" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:simpleType name="StatusType">
+        <xs:annotation>
+            <xs:documentation>Identifies if a request was successful or not</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:NMTOKEN">
+            <xs:enumeration value="ERROR"/>
+            <xs:enumeration value="STATUS_OK"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="JavaDateType">
+        <xs:annotation>
+            <xs:documentation>Date format</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="ApplicationType">
+        <xs:annotation>
+            <xs:documentation>Identifies the application for scripting</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="AID" type="xs:string" use="required"/>
+        <xs:attribute name="type" type="xs:string" use="required"/>
+        <xs:attribute name="version" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="ScriptIdType">
+        <xs:annotation>
+            <xs:documentation>Identifies the script being applied</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="scriptSequenceNumber" type="xs:nonNegativeInteger" use="required"/>
+        <xs:attribute name="requestID" type="xs:string" use="required"/>
+        <xs:attribute name="autoRetryCount" type="xs:nonNegativeInteger" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="CardIdType">
+        <xs:annotation>
+            <xs:documentation>Identifies individual card in acquiring system</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="PAN" type="xs:nonNegativeInteger" use="required"/>
+        <xs:attribute name="PANSequence" type="xs:nonNegativeInteger" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="AppType">
+        <xs:annotation>
+            <xs:documentation>Identifies the type of application</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="applicationType" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>The Issuer defined application type of the card</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="applicationVersion" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>The Issuer defined application version of the card</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="CardType">
+        <xs:annotation>
+            <xs:documentation>Identifies individual card in SEM</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="PAN" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>The Primary Account Number of the card</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="PANSequence" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>The PAN sequence number of the card</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="ExpirationDate" type="JavaDateType" use="required">
+            <xs:annotation>
+                <xs:documentation>The 'To' validity date of the card</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="ScriptType">
+        <xs:sequence>
+            <xs:element name="scriptCommands">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="scriptCommand" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="dataItems">
+                                        <xs:complexType>
+                                            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                                                <xs:element name="dataItem" type="TagType"/>
+                                            </xs:sequence>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                                <xs:attribute name="CLA" type="xs:string" use="required"/>
+                                <xs:attribute name="INS" type="xs:string" use="required"/>
+                                <xs:attribute name="P1" type="xs:string" use="required"/>
+                                <xs:attribute name="P2" type="xs:string" use="required"/>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="validPeriod">
+                <xs:complexType>
+                    <xs:attribute name="startDate" type="xs:string" use="required"/>
+                    <xs:attribute name="endDate" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="businessFunctionID" type="xs:string" use="required"/>
+        <xs:attribute name="businessFunctionGroup" type="xs:nonNegativeInteger" use="required"/>
+        <xs:attribute name="scriptType" type="xs:string" use="required"/>
+        <xs:attribute name="validDevices" type="xs:integer" use="required"/>
+        <xs:attribute name="priority" type="xs:integer" use="required"/>
+        <xs:attribute name="autoRestageLimit" type="xs:integer" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="TransactionType">
+        <xs:attribute name="atc" type="xs:string" use="required"/>
+        <xs:attribute name="transactionDate" type="xs:string" use="required"/>
+        <xs:attribute name="scriptBytes" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="DeviceType">
+        <xs:attribute name="deviceType" type="xs:integer" use="required"/>
+        <xs:attribute name="deviceCapabilities" type="xs:string" use="optional"/>
+    </xs:complexType>
+    <xs:simpleType name="TrackingReferenceType">
+        <xs:annotation>
+            <xs:documentation>TrackingReferenceType is a unique message identifier that is associated with all request
+                messages and is assigned by the sending system
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+    <xs:complexType name="PANType">
+        <xs:attribute name="PAN" type="xs:string" use="required"/>
+        <xs:attribute name="PANSequence" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="ErrorType">
+        <xs:attribute name="ErrorCode" type="xs:string" use="required"/>
+        <xs:attribute name="Description" type="xs:string" use="required"/>
+        <xs:attribute name="Data" type="xs:string" use="optional"/>
+    </xs:complexType>
+
+    <xs:element name="CardSetupResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="TrackingReference" type="TrackingReferenceType"/>
+                <xs:element name="Status" type="StatusType">
+                    <xs:annotation>
+                        <xs:documentation>Indicates if the action was successful or not</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="error" type="ErrorType" minOccurs="0">
+                    <xs:annotation>
+                        <xs:documentation>It is only present if the status contains 'ERROR'</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

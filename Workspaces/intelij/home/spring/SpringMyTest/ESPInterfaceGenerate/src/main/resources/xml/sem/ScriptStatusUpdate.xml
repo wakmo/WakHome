@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scriptStatusUpdate source="string" target="string" datePublished="string" scriptUpdateStatus="SENT"
+                    scriptSequenceNumber="200" autoRetryCount="200">
+    <TrackingReference>PRM00019</TrackingReference>
+    <Card PAN="0129002312" PANSequence="01" ExpirationDate="1385855999999"/>
+    <BusinessFunction FunctionName="Change EMV Status"/>
+    <ScriptOrder>1</ScriptOrder>
+    <!--Optional:-->
+    <deletionDetails deletedDate="1385855999999" deletionReason="string"/>
+    <!--Optional:-->
+    <transactionDetails atc="string" transactionDate="1385855999999" scriptBytes="6765726F"/>
+    <!--Optional:-->
+    <deviceDetails deviceType="100" deviceCapabilities="anySimpleType"/>
+    <!--Optional:-->
+    <scriptDeliveryStatus deliveryStatus="STAGED"/>
+    <ScriptDataItem name="LCOR" value="4"/>
+</scriptStatusUpdate>

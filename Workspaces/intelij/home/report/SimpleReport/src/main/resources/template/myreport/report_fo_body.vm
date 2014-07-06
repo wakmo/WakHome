@@ -1,0 +1,139 @@
+#set($varTotalColumns = ${TOTAL_COLUMNS})
+#set($varTotalCounts = ${TOTAL_COUNTS})
+##
+#set($varTitles = ${titles})
+#set($varMetaData = ${meta_data})
+#set($varFields = ${varMetaData.fields})
+#set($varColumns = ${columns})
+#set($varDataRows = ${data_rows})
+#set($varFooters = ${footers})
+##
+#set($varTotals = ${totals})
+#set($varAllTotals = $varTotals.get("AllTotal"))
+##
+##-------------------------------------------
+<?xml version="1.0" encoding="iso-8859-1"?>
+<fo:root font-family="TrebuchetMS" font-size="8pt" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:w="http://schemas.microsoft.com/office/word/2003/wordml">
+	<fo:layout-master-set xmlns:dt="uuid:C2F41010-65B3-11d1-A29F-00AA00C14882" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:aml="http://schemas.microsoft.com/aml/2001/core" xmlns:wx="http://schemas.microsoft.com/office/word/2003/auxHint" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:rx="http://www.renderx.com/XSL/Extensions">
+		<fo:simple-page-master master-name="cover-page" page-width="11.693055555555556in" page-height="8.268055555555556in" margin-top="35.45pt" margin-bottom="35.45pt" margin-right="56.7pt" margin-left="56.7pt">
+			<fo:region-body margin-top="21.25pt" margin-bottom="21.25pt"/>
+			<fo:region-before extent="11in" region-name="cover-page-header"/>
+			<fo:region-after display-align="after" extent="11in" region-name="cover-page-footer"/>
+		</fo:simple-page-master>
+		<fo:simple-page-master master-name="index-page" page-width="11.693055555555556in" page-height="8.268055555555556in" margin-top="35.45pt" margin-bottom="35.45pt" margin-right="56.7pt" margin-left="56.7pt">
+			<fo:region-body margin-top="21.25pt" margin-bottom="21.25pt"/>
+			<fo:region-before extent="11in" region-name="index-page-header"/>
+			<fo:region-after display-align="after" extent="11in" region-name="index-page-footer"/>
+		</fo:simple-page-master>
+		<fo:simple-page-master master-name="report-page" page-width="11.693055555555556in" page-height="8.268055555555556in" margin-top="35.45pt" margin-bottom="35.45pt" margin-right="56.7pt" margin-left="56.7pt">
+			<fo:region-body margin-top="21.25pt" margin-bottom="21.25pt"/>
+			<fo:region-before extent="11in" region-name="report-page-header"/>
+			<fo:region-after display-align="after" extent="11in" region-name="report-page-footer"/>
+		</fo:simple-page-master>
+	</fo:layout-master-set>
+###--################################ cover page###################################################### 
+###--################################ index page######################################################  
+	
+	<fo:page-sequence master-reference="report-page" initial-page-number="1">
+###--############################### report page header ###################################################### 
+		<fo:static-content flow-name="report-page-header">
+			<fo:block/>
+		</fo:static-content>
+###--################################ report page footer ######################################################  
+		<fo:static-content flow-name="report-page-footer">
+			<fo:block/>		
+		</fo:static-content>
+###--################################ report page contents ######################################################  
+		<fo:flow flow-name="xsl-region-body">
+
+###--############################# report   ###################################################### 
+							
+				<fo:table width="100%">
+					<fo:table-column column-width="100%"/>					
+						<fo:table-body>													
+						<fo:table-row>
+							<fo:table-cell text-align="left">
+									<fo:block>
+##======================================
+##--------------------------------------
+<fo:table>		
+## ------adding title--------------------------
+<fo:table-header>	
+#foreach($title in $varTitles)
+	<fo:table-row height="20">	
+		<fo:table-cell border="4pt solid black" background-color="#DEDEDE" number-columns-spanned="${varTotalColumns}" display-align="center">		  
+			<fo:block text-align="center" font-weight="bold" font-family="HelveticaNeueLT Std Med Cn" font-size="11" color="333333">
+				${title}
+			</fo:block>	
+		</fo:table-cell>
+	</fo:table-row>	
+#end
+</fo:table-header>
+## -------adding column header-------------------------
+<fo:table-body>
+	<fo:table-row height="20">	
+#foreach($column in $varColumns)	
+		<fo:table-cell border="4pt solid black" background-color="#DEDEDE" number-columns-spanned="${column.columns.size()}" display-align="center">		  
+			<fo:block text-align="center" font-weight="bold" font-family="HelveticaNeueLT Std Med Cn" font-size="11" color="333333">
+				${column.header}
+			</fo:block>	
+		</fo:table-cell>	
+#end
+	</fo:table-row>	
+## -------adding data rows-------------------------
+#foreach($data_row in $varDataRows)
+	<fo:table-row height="20">	
+#foreach($field in $varFields)
+#set($varColumn = ${field.column})
+	<fo:table-cell border="4pt solid black" background-color="#DEDEDE" number-columns-spanned="1" display-align="center">		  
+		<fo:block text-align="${varColumn.align}"  font-family="HelveticaNeueLT Std Med Cn" font-size="11" color="333333">
+			$data_row.get($field.mapping)
+		</fo:block>	
+	</fo:table-cell>
+#end
+	</fo:table-row>	
+#end
+## ---------adding total-----------------------
+<fo:table-row height="20">	
+#foreach($field in $varFields)
+#set($varColumn = ${field.column})
+
+	<fo:table-cell border="4pt solid black" background-color="#DEDEDE" number-columns-spanned="1" display-align="center">		  
+		<fo:block text-align="${varColumn.align}"  font-family="HelveticaNeueLT Std Med Cn" font-size="11" color="333333">
+			#if(${varColumn.dataType}=="group")AllTotal#else$!varAllTotals.get($field.mapping)#end
+		</fo:block>	
+	</fo:table-cell>  
+#end
+</fo:table-row>	
+## --------adding footer------------------------
+#foreach($footer in $varFooters)
+	<fo:table-row height="20">	
+		<fo:table-cell border="4pt solid black" background-color="#DEDEDE" number-columns-spanned="${varTotalColumns}" display-align="center">		  
+			<fo:block text-align="center" font-weight="bold" font-family="HelveticaNeueLT Std Med Cn" font-size="11" color="333333">
+				${footer}
+			</fo:block>	
+		</fo:table-cell>
+	</fo:table-row>
+#end
+
+<fo:table-row>
+	<fo:table-cell>
+				<fo:block>&#xA0;</fo:block>
+	</fo:table-cell>
+</fo:table-row>
+   
+</fo:table-body>
+</fo:table>
+##--------------------------------------
+##======================================
+
+									</fo:block>
+							</fo:table-cell>
+					</fo:table-row>
+				</fo:table-body>
+			</fo:table>		
+			
+		</fo:flow>
+	</fo:page-sequence>
+	
+</fo:root>

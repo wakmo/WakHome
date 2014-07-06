@@ -1,0 +1,40 @@
+<html>
+<head></head>
+<body>
+<table cellpadding="0" cellspacing="0" width="964px">
+## --------------------------------
+#foreach($titleRow in $titleRows)
+<tr>
+ #foreach($titleCell in $titleRow.cells)
+  <td colspan="${titleCell.colspan}">${titleCell.data}</td>
+ #end
+</tr>
+#end
+## --------------------------------
+#foreach($headerRow in $headerRows)
+<tr>
+ #foreach($headerCell in $headerRow.cells)
+  <td>${headerCell.data}</td>
+ #end
+</tr>
+#end
+## --------------------------------
+#foreach($dataRow in $dataRows)
+<tr>
+ #foreach($dataCell in $dataRow.cells)
+  <td>name:"${dataCell.data}",x:"${dataCell.x}",y:"${dataCell.y}"</td>
+ #end
+</tr>
+#end
+## --------------------------------
+#foreach($footerRow in $footerRows)
+<tr>
+ #foreach($footerCell in $footerRow.cells)
+  <td colspan="${footerCell.colspan}">${footerCell.data}</td>
+ #end
+</tr>
+#end
+## --------------------------------
+</table>
+</body>
+</html>

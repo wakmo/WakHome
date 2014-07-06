@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- <context:annotation-config /> -->
+
+    <!-- <bean class ="org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"/> -->
+
+    <!-- <property name="hostName" value="#{appProperties['affina.mq.hostname']}"/> -->
+
+
+    <!-- Datasource for PMA -->
+    <!-- 
+	<bean id="dataSource_pma" class="org.springframework.jndi.JndiObjectFactoryBean">
+        <property name="jndiName" value="java:comp/env/AffinaDataSourceAlias_pma"/>
+    </bean> 
+	-->
+
+
+    <!--
+        <jee:jndi-lookup id="dataSource_pma" jndi-name="jdbc/jpetstore"/>
+        <bean id="txManager_pma" class="org.springframework.transaction.jta.JtaTransactionManager" />
+    -->
+
+    <!-- Datasource for PMA -->
+    <bean id="dataSource_pma" class="oracle.jdbc.pool.OracleDataSource">
+        <property name="connectionCachingEnabled" value="true"/>
+        <property name="URL" value="jdbc:oracle:thin:@///AffinaDB"/>
+        <property name="user" value="#{appProperties['database.pma.user']}"/>
+        <property name="password" value="#{appProperties['database.pma.password']}"/>
+    </bean>
+
+    <!-- <orcl:pooling-datasource id="dataSource_pma"
+            url="jdbc:oracle:thin:@///AffinaDB"
+            username="#{appProperties['database.pma.user']}"
+            password="#{appProperties['database.pma.password']}"/>
+     -->
+    <!-- <bean id="connectionPool1" class="oracle.jdbc.pool.OracleDataSource" destroy-method="close">
+        <property name="connectionCachingEnabled" value="true" />
+        <property name="URL">
+                 <value>jdbc:oracle:thin:@///AffinaDB</value>
+        </property>
+        <property name="user">
+                 <value>#{appProperties['database.pma.user']}</value>
+        </property>
+        <property name="password">
+                 <value>#{appProperties['database.pma.password']}</value>
+        </property>
+        <property name="connectionCacheProperties">
+              <value>
+                MinLimit:1
+                MaxLimit:5
+                InitialLimit:1
+                ConnectionWaitTimeout:120
+                InactivityTimeout:180
+                ValidateConnection:true
+              </value>
+        </property>
+    </bean> -->
+
+    <!-- a PlatformTransactionManager is still required -->
+    <!-- (this dependency is defined somewhere else) -->
+    <!-- <bean id="txManager_pma" class="org.springframework.transaction.PlatformTransactionManager"> -->
+    <!-- <bean id="txManager_pma" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource_pma"/>
+    </bean> -->
+
+    <!-- enable the configuration of transactional behavior based on annotations -->
+    <!-- <tx:annotation-driven transaction-manager="txManager_pma"/> -->
+
+
+    <!-- Session Manager for PMA - No external transaction synchronization -->
+    <bean id="sessionManager_pma"
+          class="com.platform7.standardinfrastructure.database.AffinaTOPLinkSessionManager"
+          init-method="initialize">
+        <property name="user" value="#{appProperties['database.pma.user']}"/>
+        <property name="password" value="#{appProperties['database.pma.password']}"/>
+        <property name="topLinkMappingClassName" value="com.platform7.stdpma.databaseproject.toplinkproject"/>
+        <property name="dataSource" ref="dataSource_pma"/>
+        <property name="showSQL" value="#{appProperties['database.showSQL']}"/>
+    </bean>
+
+    <!-- <bean id="cardSetupDAO" class="net.aconite.affina.espinterface.dao.CardSetupDAO">
+        <constructor-arg ref="sessionManager_pma" />
+    </bean> -->
+
+    <!-- Session Manager for PMA - Synchronizes with external transaction -->
+    <bean id="sessionManager_pma_Tx"
+          class="com.platform7.standardinfrastructure.database.AffinaTOPLinkSessionManager"
+          init-method="initialize">
+        <property name="user" value="#{appProperties['database.pma.user']}"/>
+        <property name="password" value="#{appProperties['database.pma.password']}"/>
+        <property name="topLinkMappingClassName" value="com.platform7.stdpma.databaseproject.toplinkproject"/>
+        <property name="externalTransactionController">
+            <bean class="com.platform7.standardinfrastructure.database.ToplinkWAS6_1ExternalTransactionController"/>
+        </property>
+        <property name="dataSource" ref="dataSource_pma"/>
+        <property name="showSQL" value="#{appProperties['database.showSQL']}"/>
+    </bean>
+
+    <!-- The default Non-Tx Session Manager (PMA in this container) -->
+    <alias name="sessionManager_pma" alias="sessionManager_default"/>
+
+
+</beans>

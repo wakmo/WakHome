@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<!--
+	NOTE: no explicit transaction manager bean is necessary
+	because the QueueReceiverSessionPool will
+	start transactions by itself.
+-->
+
+<beans>
+
+<!-- For non-xa -->
+	<bean id="datasource"
+		class="com.atomikos.jdbc.nonxa.AtomikosNonXADataSourceBean" init-method="init" destroy-method="close">
+		<property name="uniqueResourceName"><value>NONXADBMS</value></property>
+		<property name="url"><value>jdbc:derby:db;create=true</value></property>
+		<property name="driverClassName"><value>org.apache.derby.jdbc.EmbeddedDriver</value></property>
+		<property name="poolSize"><value>1</value></property>
+		<property name="borrowConnectionTimeout"><value>60</value></property>
+	</bean>
+	<!-- NOTE: for XA datasources: don't forget to call init and close ! -->
+
+	<bean id="xaFactory" class="org.apache.activemq.ActiveMQXAConnectionFactory">
+		<property name="brokerURL" value="tcp://localhost:61616"/>
+	</bean>
+
+	<bean id="queue" class="org.apache.activemq.command.ActiveMQQueue">
+		<property name="physicalName" value="BANK_QUEUE"/>
+	</bean>
+
+	<bean id="bank" class="jdbc.Bank">
+		<property name="dataSource" ref="datasource"/>
+	</bean>
+
+	<bean id="messageDrivenBank" class="jms.MessageDrivenBank">
+		<property name="bank" ref="bank"/>
+	</bean>
+
+	<!-- Configure the JMS connector -->
+	<!-- NOTE: normally we would  specify init-method="init"
+     but this seems to block with ActiveMQ (cf. our case 24883)
+	-->
+	<bean id="atomikosConnectionFactoryBean"
+		class="com.atomikos.jms.AtomikosConnectionFactoryBean" destroy-method="close">
+		<property name="uniqueResourceName" value="QUEUE_BROKER"/>
+		<property name="xaConnectionFactory" ref="xaFactory"/>
+	</bean>
+
+<!-- Configure the session pool for JMS. This will also manage the transactions
+for incoming messages. -->
+	<bean id="messageDrivenContainer"
+		class="com.atomikos.jms.extra.MessageDrivenContainer"
+		init-method="start" destroy-method="stop">
+    	<property name="atomikosConnectionFactoryBean" ref="atomikosConnectionFactoryBean"/>
+    	<property name="transactionTimeout" value="120"/>
+    	<property name="destination" ref="queue"/>
+    	<property name="messageListener" ref="messageDrivenBank"/>
+	</bean>
+</beans>

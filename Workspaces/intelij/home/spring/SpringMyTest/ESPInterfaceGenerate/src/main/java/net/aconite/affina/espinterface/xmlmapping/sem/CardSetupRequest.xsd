@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 sp1 (x64) (http://www.altova.com) by Ben Westlake (Aconite Technology) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified"
+           version="1.0">
+    <xs:include schemaLocation="CommonData.xsd"/>
+    <xs:element name="CardSetupRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="TrackingReference" type="TrackingReferenceType"/>
+                <xs:element name="Card" type="CardType"/>
+                <xs:element name="Application" type="AppType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

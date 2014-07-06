@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:int-jms="http://www.springframework.org/schema/integration/jms"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/integration/jms
+	http://www.springframework.org/schema/integration/jms/spring-integration-jms.xsd
+	http://www.springframework.org/schema/util
+	http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+    <!-- ////////////// Defining Connection Factories ///////////////////////////////////////////////////////////////-->
+    <!-- Affina MQ connection-->
+    <bean id="affinaMQConnectionFactory" class="com.ibm.mq.jms.MQQueueConnectionFactory">
+        <property name="hostName" value="#{appProperties['jms.hostName']}"/>
+        <property name="port" value="#{appProperties['jms.port']}"/>
+        <property name="queueManager" value="#{appProperties['jms.queueManager']}"/>
+        <property name="transportType" value="#{appProperties['jms.transportType']}"/>
+        <!-- <property name="channel" value="#{appProperties['jms.channel']}"/>		 -->
+        <property name="useConnectionPooling" value="true"/>
+    </bean>
+
+    <!-- Affina MTopic connection-->
+    <bean id="affinaMTConnectionFactory" class="com.ibm.mq.jms.MQTopicConnectionFactory">
+        <property name="hostName" value="#{appProperties['jms.hostName']}"/>
+        <property name="port" value="#{appProperties['jms.port']}"/>
+        <property name="queueManager" value="#{appProperties['jms.queueManager']}"/>
+        <property name="transportType" value="#{appProperties['jms.transportType']}"/>
+        <!-- <property name="channel" value="#{appProperties['jms.channel']}"/>		 -->
+        <property name="useConnectionPooling" value="true"/>
+    </bean>
+
+
+    <!-- ////////////// Defining Transaction Managers ///////////////////////////////////////////////////////////////-->
+    <!-- Defining transaction managers-->
+    <bean id="affinaEspTxManager" class="org.springframework.jms.connection.JmsTransactionManager">
+        <property name="connectionFactory" ref="affinaMQConnectionFactory"></property>
+    </bean>
+
+    <bean id="semEspTxManager" class="org.springframework.jms.connection.JmsTransactionManager">
+        <property name="connectionFactory" ref="affinaMQConnectionFactory"></property>
+    </bean>
+    <!--
+    <bean id="custServEspTxManager" class="org.springframework.jms.connection.JmsTransactionManager">
+        <property name="connectionFactory" ref="affinaMQConnectionFactory"></property>
+    </bean>
+     -->
+    <!-- /////////////Defining Message Queues////////////////////////////////////////////////////////////////////////-->
+    <!-- Affina-ESP Queues -->
+    <bean id="fromAffinaToEsp" class="com.ibm.mq.jms.MQQueue">
+        <constructor-arg value="#{appProperties['from.affina.to.esp.queue.name']}"/>
+        <property name="targetClient">
+            <util:constant static-field="com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CLIENT_JMS_COMPLIANT"/>
+        </property>
+    </bean>
+
+    <bean id="fromEspToAffina" class="com.ibm.mq.jms.MQQueue">
+        <constructor-arg value="#{appProperties['from.esp.to.affina.queue.name']}"/>
+        <property name="targetClient">
+            <util:constant static-field="com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CLIENT_JMS_COMPLIANT"/>
+        </property>
+    </bean>
+
+    <!-- SEM-ESP Queues -->
+    <bean id="fromSemToEsp" class="com.ibm.mq.jms.MQQueue">
+        <constructor-arg value="#{appProperties['from.sem.to.esp.queue.name']}"/>
+        <property name="targetClient">
+            <util:constant static-field="com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CLIENT_JMS_COMPLIANT"/>
+        </property>
+    </bean>
+
+    <bean id="fromEspToSem" class="com.ibm.mq.jms.MQQueue">
+        <constructor-arg value="#{appProperties['from.esp.to.sem.queue.name']}"/>
+        <property name="targetClient">
+            <util:constant static-field="com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CLIENT_JMS_COMPLIANT"/>
+        </property>
+    </bean>
+
+    <!-- CustomerService-ESP Queues
+    <bean id="fromCustServToEsp" class="com.ibm.mq.jms.MQQueue">
+        <constructor-arg value="#{appProperties['from.custserv.to.esp.queue.name']}" />
+        <property name="targetClient">
+            <util:constant static-field="com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CLIENT_JMS_COMPLIANT" />
+        </property>
+    </bean>
+
+    <bean id="fromEspToCustServ" class="com.ibm.mq.jms.MQQueue">
+        <constructor-arg value="#{appProperties['from.esp.to.custserv.queue.name']}" />
+        <property name="targetClient">
+            <util:constant static-field="com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CLIENT_JMS_COMPLIANT" />
+        </property>
+    </bean>
+    -->
+
+    <!-- /////////////Defining Message Topics////////////////////////////////////////////////////////////////////////-->
+    <!-- Affina-ESP Topics -->
+    <bean id="fromEspToAffinaAlarmTopic" class="com.ibm.mq.jms.MQTopic">
+        <constructor-arg value="#{appProperties['destName.alarms']}"/>
+        <property name="targetClient">
+            <util:constant static-field="com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CLIENT_JMS_COMPLIANT"/>
+        </property>
+    </bean>
+
+    <bean id="fromEspToAffinaProgressTopic" class="com.ibm.mq.jms.MQTopic">
+        <constructor-arg value="#{appProperties['destName.progress']}"/>
+        <property name="targetClient">
+            <util:constant static-field="com.ibm.msg.client.wmq.common.CommonConstants.WMQ_CLIENT_JMS_COMPLIANT"/>
+        </property>
+    </bean>
+
+
+    <!-- /////////////Defining Channel Adapter/////////////////////////////////////////////////////////////////////////////////-->
+    <!-- FROM Affina TO ESP-->
+    <int-jms:message-driven-channel-adapter
+            id="jmsFromAffinaToEsp"
+            destination="fromAffinaToEsp"
+            channel="fromAffinaToEspJMSChannel"
+            connection-factory="affinaMQConnectionFactory"
+            error-channel="errorChannel"
+            header-mapper="defaultJmsHeaderMapper"
+            transaction-manager="affinaEspTxManager"/>
+
+    <!-- FROM ESP TO Affina -->
+    <int-jms:outbound-channel-adapter
+            id="jmsFromEspToAffina"
+            destination="fromEspToAffina"
+            channel="fromEspToAffinaJMSChannel"
+            connection-factory="affinaMQConnectionFactory"
+            header-mapper="defaultJmsHeaderMapper"/>
+
+    <!-- ~~~~~~~~Error / progress Adaptor~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+    <!-- FROM ESP TO Affina ALARM TOPIC-->
+    <int-jms:outbound-channel-adapter
+            id="jmsFromEspToAffinaAlarm"
+            destination="fromEspToAffinaAlarmTopic"
+            channel="fromEspToAffinaErrorChannel"
+            connection-factory="affinaMTConnectionFactory"
+            header-mapper="defaultJmsHeaderMapper"/>
+
+    <!-- FROM ESP TO Affina PROGRESS TOPIC-->
+    <int-jms:outbound-channel-adapter
+            id="jmsFromEspToAffinaProgress"
+            destination="fromEspToAffinaProgressTopic"
+            channel="fromEspToAffinaProgressChannel"
+            connection-factory="affinaMTConnectionFactory"
+            header-mapper="defaultJmsHeaderMapper"/>
+
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  -->
+    <!-- FROM SEM TO ESP -->
+    <int-jms:message-driven-channel-adapter
+            id="jmsFromSemToEsp"
+            destination="fromSemToEsp"
+            channel="fromSemToEspJMSChannel"
+            connection-factory="affinaMQConnectionFactory"
+            error-channel="errorChannel"
+            header-mapper="defaultJmsHeaderMapper"
+            transaction-manager="semEspTxManager"/>
+
+    <!-- FROM ESP TO SEM -->
+    <int-jms:outbound-channel-adapter
+            id="jmsFromEspToSem"
+            destination="fromEspToSem"
+            channel="fromEspToSemJMSChannel"
+            connection-factory="affinaMQConnectionFactory"
+            header-mapper="defaultJmsHeaderMapper"/>
+
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++  -->
+    <!-- FROM Customer Service TO ESP -->
+    <!-- <int-jms:message-driven-channel-adapter
+            id="jmsFromCustServToEsp"
+            destination="fromCustServToEsp"
+            channel="fromCustServToEspUnmarshallerChannel"
+            connection-factory="affinaMQConnectionFactory"
+            header-mapper="defaultJmsHeaderMapper"
+            acknowledge="transacted"
+            transaction-manager="affinaEspTxManager"/> -->
+
+    <!-- FROM ESP TO Customer Service -->
+    <!-- <int-jms:outbound-channel-adapter
+            id="jmsFromEspToCustServ"
+            destination="fromEspToCustServ"
+            channel="fromEspToCustServJMSChannel"
+            connection-factory="affinaMQConnectionFactory"
+            header-mapper="defaultJmsHeaderMapper"/> -->
+
+
+    <!-- Allows to access the JMS message headers via the spring message header.-->
+    <bean id="defaultJmsHeaderMapper" class="org.springframework.integration.jms.DefaultJmsHeaderMapper"/>
+
+</beans>
