@@ -122,9 +122,14 @@
                 <xs:documentation>The PAN sequence number of the card</xs:documentation>
             </xs:annotation>
         </xs:attribute>
-        <xs:attribute name="ExpirationDate" type="JavaDateType" use="required">
+        <xs:attribute name="expirationYear" type="xs:string" use="required">
             <xs:annotation>
-                <xs:documentation>The 'To' validity date of the card</xs:documentation>
+                <xs:documentation>The 'To' validity date of the card in YYYY format</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="expirationMonth" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>The 'To' validity date of the card in MM format</xs:documentation>
             </xs:annotation>
         </xs:attribute>
     </xs:complexType>

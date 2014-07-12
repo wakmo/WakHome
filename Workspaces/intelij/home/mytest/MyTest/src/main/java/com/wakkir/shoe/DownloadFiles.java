@@ -83,7 +83,7 @@ public class DownloadFiles
 
     public void grabAllImages(String webUrl,String destinationImagePath,boolean keepSameFolderStructure)  throws IOException
     {
-        //It’s recommended to specify a “userAgent” in Jsoup, to avoid HTTP 403 error messages.
+        //Its recommended to specify a user agent in Jsoup, to avoid HTTP 403 error messages.
         Document doc = Jsoup.connect(webUrl).userAgent("Mozilla").get();
         Elements images = doc.select("img[src~=(?i)\\.(png|jpe?g|gif)]");
         System.out.println("Number of elements found is "+images.size());

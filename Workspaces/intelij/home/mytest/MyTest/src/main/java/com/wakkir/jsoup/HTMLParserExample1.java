@@ -30,7 +30,7 @@ public class HTMLParserExample1
             //doc = Jsoup.connect("http://google.com").get();
 
             //Note
-            //It’s recommended to specify a “userAgent” in Jsoup, to avoid HTTP 403 error messages.
+            //Its recommended to specify a userAgent in Jsoup, to avoid HTTP 403 error messages.
 
             doc = Jsoup.connect("http://aiselin.en.alibaba.com/productgrouplist-219592382/Big_size_shoes.html")
                     .userAgent("Mozilla")

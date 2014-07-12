@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 2 U (http://www.xmlspy.com) by Leon Stelmaszyk (Datacard Platform Seven Limited) -->
+<xs:schema  xmlns:xs="http://www.w3.org/2001/XMLSchema"  elementFormDefault="qualified">
+	<xs:include schemaLocation="CommonData.xsd"/>	
+	<xs:element name="SendScriptResponse">
+		<xs:annotation>
+			<xs:documentation>Response message from Affina to Customer services SendScript request</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="TrackingReference" type="TrackingReferenceType"/>
+				<xs:element name="Rejection" type="RejectionType" minOccurs="0"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

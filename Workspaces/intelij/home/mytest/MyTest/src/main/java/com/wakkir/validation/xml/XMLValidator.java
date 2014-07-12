@@ -1,20 +1,30 @@
 package com.wakkir.validation.xml;
 
 import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Source;
 import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 import java.io.*;
 import java.net.URL;
 
+import java.io.IOException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.SchemaFactory;
+
+import nu.xom.Builder;
+import nu.xom.ParsingException;
+import org.xml.sax.InputSource;
+
+import org.xml.sax.SAXException;
+import org.xml.sax.XMLReader;
 /**
  * User: wakkir
  * Date: 21/01/14
@@ -22,31 +32,171 @@ import java.net.URL;
  */
 public class XMLValidator
 {
-    public static void main(String args[])
+    private static String xmlE = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+            "<CardSetupResponse>\n" +
+            "    <TrackingReference>13121221212</TrackingReference>\n" +
+            "    <Status>STATUS_OK</Status>\n" +
+            "</CardSetupResponse>";
+
+    private static String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+            "<CardSetupResponse>\n" +
+            "    <TrackingReference>235235235235</TrackingReference>\n" +
+            "    <status>STATUS_OK</status>\n" +
+            "</CardSetupResponse>";
+    
+    private static String xmlS = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
+            "<ScriptStatusUpdate source=\"Perm\" target=\"Affina\" datePublished=\"1399900723234\" scriptUpdateStatus=\"STAGED\" scriptSequenceNumber=\"15\" autoRetryCount=\"0\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n" +
+            "	<TrackingReference>0130000126_staged_04</TrackingReference>\n" +
+            "	<Card PAN=\"0130000126\" PANSequence=\"02\" expirationYear=\"2018\" expirationMonth=\"02\"/>\n" +
+            "	<BusinessFunction FunctionName=\"Change eId Status\"/>\n" +
+            "	<ScriptOrder>603</ScriptOrder>\n" +
+            "	<ScriptDataItem name=\"PKI Status\" value=\"inactive\"/>\n" +
+            "</ScriptStatusUpdate>";
+
+    
+    public void validateWithDomParser() throws ParserConfigurationException, IOException, SAXException
     {
-        XMLValidator val = new XMLValidator();
-        try
+        //http://onjavahell.blogspot.co.uk/2009/04/how-to-validate-xml-document-from-xml_12.html
+
+        //XML parsing
+        DocumentBuilderFactory docBuilderfactory = DocumentBuilderFactory.newInstance();
+        docBuilderfactory.setValidating(true);
+        docBuilderfactory.setNamespaceAware(true);
+        DocumentBuilder builder = docBuilderfactory.newDocumentBuilder();
+
+        InputStream is = new ByteArrayInputStream(xml.getBytes());
+        Document xmlDocument = builder.parse(is);
+        xmlDocument.getDocumentElement().normalize();
+        
+        SchemaFactory schemaFactory1 = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        Schema schema1;
+        
+        if(true)
         {
-            val.do3();
-            //val.xx();
+            URL xsdUrlAll = this.getClass().getResource("/xsd/net/aconite/affina/espinterface/xmlmapping/sem/AllInOneIn.xsd");
+            schema1= schemaFactory1.newSchema(xsdUrlAll);
         }
-        catch (ParserConfigurationException e)
+        else
         {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            URL xsdUrlA = this.getClass().getResource("/xsd/net/aconite/affina/espinterface/xmlmapping/sem/ScriptStatusResponse.xsd");
+            URL xsdUrlB = this.getClass().getResource("/xsd/net/aconite/affina/espinterface/xmlmapping/sem/CardSetupResponse.xsd");
+            URL xsdUrlC = this.getClass().getResource("/xsd/net/aconite/affina/espinterface/xmlmapping/sem/StageScriptResponse.xsd");
+      
+            String W3C_XSD_TOP_ELEMENT ="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+                + "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" elementFormDefault=\"qualified\">\n"
+                + "<xs:include schemaLocation=\"" +xsdUrlA.getPath() +"\"/>\n"
+                + "<xs:include schemaLocation=\"" +xsdUrlB.getPath() +"\"/>\n"
+                + "<xs:include schemaLocation=\"" +xsdUrlC.getPath() +"\"/>\n"
+                +"</xs:schema>";
+            schema1= schemaFactory1.newSchema(new StreamSource(new StringReader(W3C_XSD_TOP_ELEMENT)));
         }
-        catch (IOException e)
-        {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
-        catch (SAXException e)
-        {
-            System.out.println(e.getMessage());
-            //e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-        }
+              
+        //XSD parsing
+        //File xsd = new File("MyTest/src/main/resources/xsd/CardSetupResponse.xsd");
+        //File xsd = new File("MyTest/src/main/resources/xsd/x.xsd");
+        //SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        //Schema schema = schemaFactory.newSchema(xsd);
+
+        //Validation
+        javax.xml.validation.Validator validator = schema1.newValidator();
+        Source source = new DOMSource(xmlDocument);
+        validator.validate(source);
+    }
+    
+    public void do4() throws ParserConfigurationException, IOException, SAXException
+    {
+        //http://onjavahell.blogspot.co.uk/2009/04/how-to-validate-xml-document-from-xml_12.html
+
+
+        //XML parsing
+        DocumentBuilderFactory docBuilderfactory = DocumentBuilderFactory.newInstance();
+        docBuilderfactory.setValidating(true);
+        docBuilderfactory.setNamespaceAware(true);
+        DocumentBuilder builder = docBuilderfactory.newDocumentBuilder();
+
+        InputStream is = new ByteArrayInputStream(xml.getBytes());
+        Document xmlDocument = builder.parse(is);
+        xmlDocument.getDocumentElement().normalize();
+        
+        InputStream iss=this.getClass().getClassLoader().getResourceAsStream("/net/aconite/affina/espinterface/xmlmapping/sem/ScriptStatusResponse.xsd");
+        //URL xsdUrlA = this.getClass().getResource("/xsd/net/aconite/affina/espinterface/xmlmapping/sem/ScriptStatusResponse.xsd");
+        //URL xsdUrlB = this.getClass().getResource("/xsd/net/aconite/affina/espinterface/xmlmapping/sem/CardSetupResponse.xsd");
+        //URL xsdUrlC = this.getClass().getResource("/xsd/net/aconite/affina/espinterface/xmlmapping/sem/StageScriptResponse.xsd");
+
+        SchemaFactory schemaFactory1 = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        
+        Schema schema1= schemaFactory1.newSchema(new StreamSource(iss));
+
+        //XSD parsing
+
+        //File xsd = new File("MyTest/src/main/resources/xsd/CardSetupResponse.xsd");
+        //File xsd = new File("MyTest/src/main/resources/xsd/x.xsd");
+        //SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        //Schema schema = schemaFactory.newSchema(xsd);
+
+        //Validation
+        javax.xml.validation.Validator validator = schema1.newValidator();
+        Source source = new DOMSource(xmlDocument);
+        validator.validate(source);
+    }
+
+    public void xx() throws ParserConfigurationException, IOException, SAXException
+    {
+
+        //http://stackoverflow.com/questions/19424399/xml-validation-against-xsd-by-using-spring-java
+
+        //new StreamSource(new File("MyTest/xsd/ScriptStatusResponse.xsd")),
+                //new StreamSource(new File("MyTest/xsd/CardSetupResponse.xsd")),
+                //new StreamSource(new File("MyTest/xsd/StageScriptResponse.xsd"))};
+
+        //URL xsdUrlA = this.getClass().getResource("/ScriptStatusResponse.xsd");
+        //URL xsdUrlB = this.getClass().getResource("/CardSetupResponse.xsd");
+        //URL xsdUrlC = this.getClass().getResource("/StageScriptResponse.xsd");
+
+        URL xsdUrlA = this.getClass().getResource("/net/aconite/affina/espinterface/xmlmapping/sem/ScriptStatusResponse.xsd");
+        URL xsdUrlB = this.getClass().getResource("/net/aconite/affina/espinterface/xmlmapping/sem/CardSetupResponse.xsd");
+        URL xsdUrlC = this.getClass().getResource("/net/aconite/affina/espinterface/xmlmapping/sem/StageScriptResponse.xsd");
+
+        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+        String W3C_XSD_TOP_ELEMENT ="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+                        + "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" elementFormDefault=\"qualified\">\n"
+                        //+ "<xs:include schemaLocation=\"" +xsdUrlA.getPath() +"\"/>\n"
+                        + "<xs:include schemaLocation=\"" +xsdUrlB.getPath() +"\"/>\n"
+                       // + "<xs:include schemaLocation=\"" +xsdUrlC.getPath() +"\"/>\n"
+                        +"</xs:schema>";
+
+
+        Schema schema = schemaFactory.newSchema(new StreamSource(new StringReader(W3C_XSD_TOP_ELEMENT), "xsdTop"));
+
+        //XML parsing
+        DocumentBuilderFactory docBuilderfactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = docBuilderfactory.newDocumentBuilder();
+
+        InputStream is = new ByteArrayInputStream(xml.getBytes());
+        Document xmlDocument = builder.parse(is);
+        xmlDocument.getDocumentElement().normalize();
+
+
+        javax.xml.validation.Validator validator = schema.newValidator();
+        Source source1 = new DOMSource(xmlDocument);
+        validator.validate(source1);
+
+        //XSD parsing
+        //File xsd = new File("src/main/resources/xsd/yourXsd.xsd");
+        //File xsd = new File("MyTest/src/main/java/com/wakkir/validation/xml/test.xsd");
+        //SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        //Schema schema = schemaFactory.newSchema(xsd);
+
+
+        //Validation
+        //javax.xml.validation.Validator validator = schema.newValidator();
+        //Source source = new DOMSource(xmlDocument);
+        //validator.validate(source);
 
 
     }
-
+    
     public void one() throws ParserConfigurationException, IOException, SAXException
     {
         /*
@@ -147,111 +297,83 @@ public class XMLValidator
     }
     */
 
-    private static String xml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-            "<CardSetupResponse>\n" +
-            "    <TrackingReference>13121221212</TrackingReference>\n" +
-            "    <Status>STATUS_OK</Status>\n" +
-            "</CardSetupResponse>";
-
-    private static String xml2 = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
-            "<ScriptStatusResponse>\n" +
-            "    <TrackingReference>235235235235</TrackingReference>\n" +
-            "    <status>STATUS_OK</status>\n" +
-            "</ScriptStatusResponse>";
-
-
-    public void do3() throws ParserConfigurationException, IOException, SAXException
+    
+    
+    void xomValidate() throws ParserConfigurationException, SAXException, ParsingException, IOException
     {
-        //http://onjavahell.blogspot.co.uk/2009/04/how-to-validate-xml-document-from-xml_12.html
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        factory.setValidating(true);
+        factory.setNamespaceAware(true);
 
+        SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+        
+        URL xsdUrlAll = this.getClass().getResource("/xsd/net/aconite/affina/espinterface/xmlmapping/sem/AllInOneIn.xsd");
+        //factory.setSchema(schemaFactory.newSchema( new Source[] {new StreamSource("contacts.xsd")}));
+        factory.setSchema(schemaFactory.newSchema( new Source[] {new StreamSource("xsd/net/aconite/affina/espinterface/xmlmapping/sem/AllInOneIn.xsd")}));
+        //factory.setSchema(schemaFactory.newSchema(xsdUrlAll));
 
-        //XML parsing
-        DocumentBuilderFactory docBuilderfactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = docBuilderfactory.newDocumentBuilder();
-
+        SAXParser parser = factory.newSAXParser();
+        XMLReader reader = parser.getXMLReader();
+        //reader.setErrorHandler(new SimpleErrorHandler());
+        
         InputStream is = new ByteArrayInputStream(xml.getBytes());
-        Document xmlDocument = builder.parse(is);
-        xmlDocument.getDocumentElement().normalize();
+        //Document xmlDocument = builder.parse(is);
+        //xmlDocument.getDocumentElement().normalize();
 
-        URL xsdUrlA = this.getClass().getResource("/xsd/net/aconite/affina/espinterface/xmlmapping/sem/ScriptStatusResponse.xsd");
-        URL xsdUrlB = this.getClass().getResource("/xsd/net/aconite/affina/espinterface/xmlmapping/sem/CardSetupResponse.xsd");
-        URL xsdUrlC = this.getClass().getResource("/xsd/net/aconite/affina/espinterface/xmlmapping/sem/StageScriptResponse.xsd");
-
-        SchemaFactory schemaFactory1 = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        String W3C_XSD_TOP_ELEMENT ="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
-                + "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" elementFormDefault=\"qualified\">\n"
-                + "<xs:include schemaLocation=\"" +xsdUrlA.getPath() +"\"/>\n"
-                + "<xs:include schemaLocation=\"" +xsdUrlB.getPath() +"\"/>\n"
-                + "<xs:include schemaLocation=\"" +xsdUrlC.getPath() +"\"/>\n"
-                +"</xs:schema>";
-        Schema schema1= schemaFactory1.newSchema(new StreamSource(new StringReader(W3C_XSD_TOP_ELEMENT)));
-
-        //XSD parsing
-
-        //File xsd = new File("MyTest/src/main/resources/xsd/CardSetupResponse.xsd");
-        //File xsd = new File("MyTest/src/main/resources/xsd/x.xsd");
-        //SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        //Schema schema = schemaFactory.newSchema(xsd);
-
-        //Validation
-        javax.xml.validation.Validator validator = schema1.newValidator();
-        Source source = new DOMSource(xmlDocument);
-        validator.validate(source);
+        Builder builder = new Builder(reader);
+        builder.build(is);
     }
-
-    public void xx() throws ParserConfigurationException, IOException, SAXException
+    
+    void saxValidator() throws SAXException, ParserConfigurationException, IOException
     {
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        factory.setValidating(false);
+        factory.setNamespaceAware(true);
 
-        //http://stackoverflow.com/questions/19424399/xml-validation-against-xsd-by-using-spring-java
+        SchemaFactory schemaFactory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
+        
+        URL xsdUrlAll = this.getClass().getResource("/xsd/net/aconite/affina/espinterface/xmlmapping/sem/AllInOneIn.xsd");
+        
+        factory.setSchema(schemaFactory.newSchema(new Source[] {new StreamSource("CardSetupResponse.xsd")}));
+        //factory.setSchema(schemaFactory.newSchema(xsdUrlAll));
+        
+        SAXParser parser = factory.newSAXParser();
 
-        //new StreamSource(new File("MyTest/xsd/ScriptStatusResponse.xsd")),
-                //new StreamSource(new File("MyTest/xsd/CardSetupResponse.xsd")),
-                //new StreamSource(new File("MyTest/xsd/StageScriptResponse.xsd"))};
-
-        //URL xsdUrlA = this.getClass().getResource("/ScriptStatusResponse.xsd");
-        //URL xsdUrlB = this.getClass().getResource("/CardSetupResponse.xsd");
-        //URL xsdUrlC = this.getClass().getResource("/StageScriptResponse.xsd");
-
-        URL xsdUrlA = this.getClass().getResource("/net/aconite/affina/espinterface/xmlmapping/sem/ScriptStatusResponse.xsd");
-        URL xsdUrlB = this.getClass().getResource("/net/aconite/affina/espinterface/xmlmapping/sem/CardSetupResponse.xsd");
-        URL xsdUrlC = this.getClass().getResource("/net/aconite/affina/espinterface/xmlmapping/sem/StageScriptResponse.xsd");
-
-        SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-
-        String W3C_XSD_TOP_ELEMENT ="<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
-                        + "<xs:schema xmlns:xs=\"http://www.w3.org/2001/XMLSchema\" elementFormDefault=\"qualified\">\n"
-                        //+ "<xs:include schemaLocation=\"" +xsdUrlA.getPath() +"\"/>\n"
-                        + "<xs:include schemaLocation=\"" +xsdUrlB.getPath() +"\"/>\n"
-                       // + "<xs:include schemaLocation=\"" +xsdUrlC.getPath() +"\"/>\n"
-                        +"</xs:schema>";
-
-
-        Schema schema = schemaFactory.newSchema(new StreamSource(new StringReader(W3C_XSD_TOP_ELEMENT), "xsdTop"));
-
-        //XML parsing
-        DocumentBuilderFactory docBuilderfactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = docBuilderfactory.newDocumentBuilder();
-
+        XMLReader reader = parser.getXMLReader();
+        //reader.setErrorHandler(new SimpleErrorHandler());
+        
         InputStream is = new ByteArrayInputStream(xml.getBytes());
-        Document xmlDocument = builder.parse(is);
-        xmlDocument.getDocumentElement().normalize();
-
-
-        javax.xml.validation.Validator validator = schema.newValidator();
-        Source source1 = new DOMSource(xmlDocument);
-        validator.validate(source1);
-
-        //XSD parsing
-        //File xsd = new File("src/main/resources/xsd/yourXsd.xsd");
-        //File xsd = new File("MyTest/src/main/java/com/wakkir/validation/xml/test.xsd");
-        //SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-        //Schema schema = schemaFactory.newSchema(xsd);
-
-
-        //Validation
-        //javax.xml.validation.Validator validator = schema.newValidator();
-        //Source source = new DOMSource(xmlDocument);
-        //validator.validate(source);
+        
+        reader.parse(new InputSource(is));
+    }
+    
+    ////////////////////////////////////////////////////////////////////////////
+    
+    public static void main(String args[])
+    {
+        XMLValidator val = new XMLValidator();
+        try
+        {
+            val.validateWithDomParser();
+            //val.xx();
+            //val.saxValidator();
+            
+            System.out.println("done");
+        }
+        catch (ParserConfigurationException e)
+        {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        catch (SAXException e)
+        {
+            System.out.println(e.getMessage());
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        } 
+        
 
 
     }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.0">
+  <xs:include schemaLocation="CardSetupResponse.xsd"/>
+  <xs:include schemaLocation="StageScriptResponse.xsd"/>
+  <xs:include schemaLocation="ScriptStatusResponse.xsd"/>
+  <xs:include schemaLocation="CardSetupRequest.xsd"/>
+  <xs:include schemaLocation="StageScriptRequest.xsd"/>
+  <xs:include schemaLocation="ScriptStatusUpdate.xsd"/>
+</xs:schema>

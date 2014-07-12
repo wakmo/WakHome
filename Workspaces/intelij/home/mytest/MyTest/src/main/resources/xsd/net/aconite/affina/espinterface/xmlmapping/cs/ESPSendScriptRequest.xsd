@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema  xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <xs:include  schemaLocation="CommonData.xsd"/>	
+    <xs:element name="SendScriptRequest">
+        <xs:annotation>
+            <xs:documentation>Customer Services requests  Affina to send stage script message to ESP</xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="User" type="UserType"/>
+                <xs:element name="DataContext" type="DataContextType"/>
+                <xs:element name="TrackingRef" type="ShortTrackingRefType"/>
+                <xs:element name="CardId" type="CardIdType"/>
+                <xs:element name="BusinessApplication">
+                    <xs:complexType>
+                        <xs:attribute name="id" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="ScriptStartDate" type="xs:date" minOccurs="0"/>
+                <xs:element name="ScriptEndDate" type="xs:date" minOccurs="0"/>
+                <xs:element name="ScriptFunction">
+                    <xs:complexType>
+                        <xs:attribute name="Function" type="xs:string" use="required"/>
+                    </xs:complexType>
+                </xs:element>                    
+                <xs:element name="Restage" type="xs:integer" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

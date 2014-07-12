@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2013 sp1 (x64) (http://www.altova.com) by Ben Westlake (Aconite Technology) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+    
+    <xs:complexType name="UserType">
+        <xs:annotation>
+            <xs:documentation>Identifies the user name and scope, which will be used as part of the audit trail</xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="Role" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation>Identifies the scope and role name. Affina will check that the role name has been granted permission to access relevant data within the specified scope</xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:attribute name="Scope" type="xs:string" use="required"/>
+                    <xs:attribute name="Id" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Scope" type="xs:string" use="required"/>
+        <xs:attribute name="Id" type="xs:string" use="required"/>
+    </xs:complexType>
+    
+   
+    
+    <xs:complexType name="DataContextType">
+        <xs:annotation>
+            <xs:documentation>Identifies the scope and name of a data context</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="Scope" type="xs:string" use="required"/>
+        <xs:attribute name="Id" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="TrackingReferenceType">
+		<xs:annotation>
+			<xs:documentation>Identifies the scope and tracking reference (a unique identifier) of an individual request</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Scope" type="xs:string" use="required"/>
+		<xs:attribute name="Id" type="xs:string" use="required"/>
+	</xs:complexType>
+    <xs:simpleType name="ShortTrackingRefType">
+		<xs:annotation>
+			<xs:documentation>The unique identifier for a request</xs:documentation>
+		</xs:annotation>
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+    <xs:simpleType name="CardIdType">
+        <xs:annotation>
+            <xs:documentation>Identifies individual card in acquiring system</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string"/>
+    </xs:simpleType>
+
+    <xs:complexType name="BusFunctionsType">
+        <xs:sequence>
+            <xs:element name="BusinessFunction" type="BusFunctionType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="BusFunctionType">		
+        <xs:attribute name="BusName" type="xs:string" use="required"/>
+    </xs:complexType>
+	
+    <xs:simpleType name="ScriptOrderType">
+        <xs:restriction base="xs:positiveInteger"/>
+    </xs:simpleType>
+    
+    <xs:complexType name="NVPType">
+        <xs:annotation>
+            <xs:documentation>identifies an element in name-value form</xs:documentation>
+        </xs:annotation>
+        <xs:attribute name="name" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>The textual name of the data item</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+        <xs:attribute name="value" type="xs:string" use="required">
+            <xs:annotation>
+                <xs:documentation>The value of the data item</xs:documentation>
+            </xs:annotation>
+        </xs:attribute>
+    </xs:complexType>
+    
+    
+    <xs:complexType name="RejectionType">
+		<xs:annotation>
+			<xs:documentation>Provides the error code and a textual description of the error</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="ErrorCode" type="xs:integer" use="required"/>
+		<xs:attribute name="Description" type="xs:string" use="required"/>
+		<xs:attribute name="DateAndTime" type="xs:dateTime" use="required"/>
+	</xs:complexType> 
+</xs:schema>
