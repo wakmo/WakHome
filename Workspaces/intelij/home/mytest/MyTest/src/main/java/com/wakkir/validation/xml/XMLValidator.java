@@ -299,8 +299,12 @@ public class XMLValidator
 
     
     
-    void xomValidate() throws ParserConfigurationException, SAXException, ParsingException, IOException
-    {
+    public void xomValidate() throws ParserConfigurationException, SAXException, ParsingException, IOException
+    {   
+        //http://www.edankert.com/validate.html
+        
+        System.setProperty("javax.xml.parsers.SAXParserFactory", "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl");
+
         SAXParserFactory factory = SAXParserFactory.newInstance();
         factory.setValidating(true);
         factory.setNamespaceAware(true);
@@ -309,23 +313,54 @@ public class XMLValidator
         
         URL xsdUrlAll = this.getClass().getResource("/xsd/net/aconite/affina/espinterface/xmlmapping/sem/AllInOneIn.xsd");
         //factory.setSchema(schemaFactory.newSchema( new Source[] {new StreamSource("contacts.xsd")}));
-        factory.setSchema(schemaFactory.newSchema( new Source[] {new StreamSource("xsd/net/aconite/affina/espinterface/xmlmapping/sem/AllInOneIn.xsd")}));
-        //factory.setSchema(schemaFactory.newSchema(xsdUrlAll));
+        //factory.setSchema(schemaFactory.newSchema( new Source[] {new StreamSource("xsd/net/aconite/affina/espinterface/xmlmapping/sem/AllInOneIn.xsd")}));
+        factory.setSchema(schemaFactory.newSchema(xsdUrlAll));
 
         SAXParser parser = factory.newSAXParser();
         XMLReader reader = parser.getXMLReader();
-        //reader.setErrorHandler(new SimpleErrorHandler());
+        reader.setErrorHandler(new SimpleErrorHandler());
         
         InputStream is = new ByteArrayInputStream(xml.getBytes());
-        //Document xmlDocument = builder.parse(is);
-        //xmlDocument.getDocumentElement().normalize();
-
+        
         Builder builder = new Builder(reader);
         builder.build(is);
     }
     
     void saxValidator() throws SAXException, ParserConfigurationException, IOException
-    {
+    {        
+        //http://www.edankert.com/validate.html
+        
+        //https://coderwall.com/p/kqsrrw
+        //JDOM2: This parser does not support specification "null" version "null"
+        /*
+        When you have a Maven project which uses JDOM2 and you create a new SaxBuilder with new SaxBuilder() you will see a stack trace like this:
+
+        java.lang.ExceptionInInitializerError
+          at org.jdom2.input.SAXBuilder.<init>(SAXBuilder.java:338)
+          at org.jdom2.input.SAXBuilder.<init>(SAXBuilder.java:221)
+          at your.package.your.class.your.method(Class.java:XX)
+        Caused by: java.lang.UnsupportedOperationException: This parser does not support specification "null" version "null"
+          at javax.xml.parsers.SAXParserFactory.setSchema(SAXParserFactory.java:419)
+          ...
+
+        In that case you're using a SAXParserFactory that doesn't override setSchema(...). This may be a version of org.apache.xerces.jaxp.SAXParserFactoryImpl before 2.7.0.
+
+        There are two fixes for the problem.
+
+        Fix 1: Use a different SAXParserFactory by setting the system property javax.xml.parsers.SAXParserFactory. E.g. the factory provided by your current JDK: com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl. This may be done by starting the JVM with
+
+        -Djavax.xml.parsers.SAXParserFactory=com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl
+
+        or within your code
+
+        System.setProperty("javax.xml.parsers.SAXParserFactory", "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl");
+
+        Fix 2: Update the factory you're using. In case of apache's factory update it at least to version 2.7.0.
+        */
+        
+        System.setProperty("javax.xml.parsers.SAXParserFactory", "com.sun.org.apache.xerces.internal.jaxp.SAXParserFactoryImpl");
+
+        
         SAXParserFactory factory = SAXParserFactory.newInstance();
         factory.setValidating(false);
         factory.setNamespaceAware(true);
@@ -334,8 +369,8 @@ public class XMLValidator
         
         URL xsdUrlAll = this.getClass().getResource("/xsd/net/aconite/affina/espinterface/xmlmapping/sem/AllInOneIn.xsd");
         
-        factory.setSchema(schemaFactory.newSchema(new Source[] {new StreamSource("CardSetupResponse.xsd")}));
-        //factory.setSchema(schemaFactory.newSchema(xsdUrlAll));
+        //factory.setSchema(schemaFactory.newSchema(new Source[] {new StreamSource("CardSetupResponse.xsd")}));
+        factory.setSchema(schemaFactory.newSchema(xsdUrlAll));
         
         SAXParser parser = factory.newSAXParser();
 
@@ -349,14 +384,15 @@ public class XMLValidator
     
     ////////////////////////////////////////////////////////////////////////////
     
-    public static void main(String args[])
+    public static void main(String args[]) throws ParsingException
     {
         XMLValidator val = new XMLValidator();
         try
         {
-            val.validateWithDomParser();
+            //val.validateWithDomParser();
             //val.xx();
             //val.saxValidator();
+            val.xomValidate();
             
             System.out.println("done");
         }
