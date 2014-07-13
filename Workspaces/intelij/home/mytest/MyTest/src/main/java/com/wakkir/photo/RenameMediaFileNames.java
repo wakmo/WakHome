@@ -24,9 +24,9 @@ public class RenameMediaFileNames
 
     public void renamePictureFiles(boolean needRename,boolean keepSameFolderStructure) throws ImageProcessingException, IOException
     {
-        String inputPath = "E:\\MyMedia\\TestMedia\\pictures";
+        String inputPath = "\\\\Fs01\\MyMedia\\MyPictures\\20140411_20140414-IsleOfWeigth\\fuji";
         String extension = ".jpg";
-        String outputPath = "E:\\MyMedia\\TestMedia\\pictures\\x";
+        String outputPath = "\\\\Fs01\\MyMedia\\MyPictures\\20140411_20140414-IsleOfWeigth\\fuji";
 
         fmd.readDirectory(inputPath, extension, outputPath,needRename,keepSameFolderStructure,0,15,"");
     }
@@ -37,7 +37,7 @@ public class RenameMediaFileNames
         try
         {
             RenameMediaFileNames rename=new RenameMediaFileNames();
-            boolean needRename=false;
+            boolean needRename=true;
             boolean keepSameFolderStructure=false;
             rename.renamePictureFiles(needRename,keepSameFolderStructure);
             //rename.renameVideoFiles(needRename,keepSameFolderStructure);

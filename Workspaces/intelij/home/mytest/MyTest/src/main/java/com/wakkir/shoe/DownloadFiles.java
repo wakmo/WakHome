@@ -192,7 +192,7 @@ public class DownloadFiles
         boolean keepSameFolderStructure=false;
 
         //String destPath="\\\\fs01\\WakSpace\\Business\\08.eBay\\Pictures\\Shoes\\06.MS-Mark&Spencer\\Boots";
-        String destPath="F:\\NAS-BACKUP\\WakSpace\\Business\\08.eBay\\Pictures\\Shoes\\07.DB-Debenhams\\temp";
+        String destPath="\\\\fs01\\WakSpace\\Business\\08.eBay\\Pictures\\Shoes\\07.DB-Debenhams\\xxx";
 
         try
         {
@@ -220,12 +220,13 @@ public class DownloadFiles
 //            map.put("T026404W-04","http://ecx.images-amazon.com/images/I/81wnBHvmk7L._SX1000_SY1300_.jpg");
 
             //Debenhams
-            String shoeId="61252_264996";
+            String shoeId="050010229960";
             map.put(shoeId+"-00","http://debenhams.scene7.com/is/image/Debenhams/"+shoeId+"?wid=1250&hei=1250&qlt=95");
             map.put(shoeId+"-01","http://debenhams.scene7.com/is/image/Debenhams/"+shoeId+"_1?wid=1250&hei=1250&qlt=95");
             map.put(shoeId+"-02","http://debenhams.scene7.com/is/image/Debenhams/"+shoeId+"_2?wid=1250&hei=1250&qlt=95");
             map.put(shoeId+"-03","http://debenhams.scene7.com/is/image/Debenhams/"+shoeId+"_3?wid=1250&hei=1250&qlt=95");
-            String productDetails=df.getProductDetails("http://www.debenhams.com/webapp/wcs/stores/servlet/prod_10701_10001_"+shoeId+"_-1","span[class=breadcrumb_current]","div[id=info1]","li");
+            map.put(shoeId+"-04","http://debenhams.scene7.com/is/image/Debenhams/"+shoeId+"_4?wid=1250&hei=1250&qlt=95");
+            String productDetails=df.getProductDetails("http://www.debenhams.com/webapp/wcs/stores/servlet/prod_10701_10001_"+shoeId+"_-1","span[class=breadcrumb_current]","div[id=product-item-no]","div[id=view-more-details-parent]","div[id=info1]","p","p","li");
 
             Set keys=map.keySet();
             Iterator<String> it=keys.iterator();
@@ -252,7 +253,7 @@ public class DownloadFiles
     //===================================================================================
     //===================================================================================
 
-    public String getProductDetails(String baseUrl,String nameElement,String detailElement,String childElement)   throws IOException
+    public String getProductDetails(String baseUrl,String nameElement,String itemNoElement,String descElement,String detailElement,String childItemNoElement,String childDescElement,String childDetailElement)   throws IOException
     {
         Document doc = Jsoup.connect(baseUrl).userAgent("Mozilla").get();
         Elements name = doc.select(nameElement);    //element : a[href]
@@ -261,15 +262,41 @@ public class DownloadFiles
         sb2.append("\n");
         sb2.append(name.text());
         sb2.append("\n");
+        
+        for (Element div : doc.select(itemNoElement))
+        {
+            for (Element ul : div.children())
+            {
+                if(ul.getElementsByTag(childItemNoElement).size()>0)
+                {
+                    //System.out.println(ul.getElementsByTag("li"));
+                    sb2.append(ul.getElementsByTag(childItemNoElement));
+                    sb2.append("\n");
+                }
+            }
+        }
+        
+        for (Element div : doc.select(descElement))
+        {
+            for (Element ul : div.children())
+            {
+                if(ul.getElementsByTag(childDescElement).size()>0)
+                {
+                    //System.out.println(ul.getElementsByTag("li"));
+                    sb2.append(ul.getElementsByTag(childDescElement));
+                    sb2.append("\n");
+                }
+            }
+        }
 
         for (Element div : doc.select(detailElement))
         {
             for (Element ul : div.children())
             {
-                if(ul.getElementsByTag(childElement).size()>0)
+                if(ul.getElementsByTag(childDetailElement).size()>0)
                 {
                     //System.out.println(ul.getElementsByTag("li"));
-                    sb2.append(ul.getElementsByTag(childElement));
+                    sb2.append(ul.getElementsByTag(childDetailElement));
                     sb2.append("\n");
                 }
             }
