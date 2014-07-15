@@ -17,7 +17,7 @@ import org.junit.Test;
 
 public class AccessControlCoordinatorTest
 {
-    private final int threadCount=100000;
+    private final int threadCount=1000;
     private final String bookNameExist="book";  
     private final String bookNameNotExist="xyz";   
     private final String bookNameNull=null;
@@ -53,23 +53,23 @@ public class AccessControlCoordinatorTest
        
     
     @Test
-    public final void whenPerformAccessCheckForFirstExistingBookThenGrandAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
+    public final void whenPerformFistAccessCheckForExistingBookThenGrandAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
     {   
         acco=new AccessControlCoordinator(new AccessControlDecisionMakerImpl(bookNameExist),new AccessControlDecisionMakerImpl(bookNameNotExist));
         boolean result=acco.performAccessCheckForBook(bookNameExist);
-        Assert.assertFalse(result);        
+        Assert.assertTrue(result);        
     }
     
     @Test
-    public final void whenPerformAccessCheckForSecondExistingBookThenGrandAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
+    public final void whenPerformSecondAccessCheckForExistingBookThenGrandAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
     {   
         acco=new AccessControlCoordinator(new AccessControlDecisionMakerImpl(bookNameNotExist),new AccessControlDecisionMakerImpl(bookNameExist));
         boolean result=acco.performAccessCheckForBook(bookNameExist);
-        Assert.assertFalse(result);        
+        Assert.assertTrue(result);        
     }
     
     @Test
-    public final void whenPerformAccessCheckForBothExistingBookThenGrandAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
+    public final void whenPerformBothAccessCheckForExistingBookThenGrandAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
     {   
         acco=new AccessControlCoordinator(new AccessControlDecisionMakerImpl(bookNameExist),new AccessControlDecisionMakerImpl(bookNameExist));
         boolean result=acco.performAccessCheckForBook(bookNameExist);
@@ -77,7 +77,7 @@ public class AccessControlCoordinatorTest
     }
     
     @Test
-    public final void whenPerformAccessCheckForNoneExistingBookThenDenyAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
+    public final void whenPerformBothAccessCheckForNoneExistingBookThenDenyAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
     {   
         acco=new AccessControlCoordinator(new AccessControlDecisionMakerImpl(bookNameNotExist),new AccessControlDecisionMakerImpl(bookNameNotExist));
         boolean result=acco.performAccessCheckForBook(bookNameExist);
@@ -85,7 +85,7 @@ public class AccessControlCoordinatorTest
     }
     
     @Test(expected = AccessControlCoordinatorException.class)
-    public final void whenPerformAccessCheckForNullThenThrowsException() throws AccessControlCoordinatorException
+    public final void whenPerformBothAccessCheckForNullBookThenThrowsException() throws AccessControlCoordinatorException
     {        
         acco=new AccessControlCoordinator(new AccessControlDecisionMakerImpl(bookNameExist),new AccessControlDecisionMakerImpl(bookNameExist));
         acco.performAccessCheckForBook(bookNameNull);       
@@ -93,38 +93,36 @@ public class AccessControlCoordinatorTest
     //////////////////////////////
     
     @Test
-    public final void whenPerformMultiAccessCheckForFirstExistingBookThenGrandAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
+    public final void whenPerformFirstMultiAccessCheckForExistingBookThenGrandAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
     {   
         acco=new AccessControlCoordinator(new AccessControlDecisionMakerImpl(bookNameExist),new AccessControlDecisionMakerImpl(bookNameNotExist));
         
         List<Boolean> expectedList = new ArrayList<Boolean>(threadCount);
         for (long i = 1; i <= threadCount; i++)
         {
-            expectedList.add(false);
+            expectedList.add(true);
         }        
         List<Boolean> resultList=doThread(acco,bookNameExist);
-        System.out.println("expectedList:"+expectedList);
-        System.out.println("resultList:"+resultList);
+        
         Assert.assertEquals(expectedList, resultList);    
     }
     
     @Test
-    public final void whenPerformMultiAccessCheckForSecondExistingBookThenGrandAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
+    public final void whenPerformSecondMultiAccessCheckForExistingBookThenGrandAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
     {   
         acco=new AccessControlCoordinator(new AccessControlDecisionMakerImpl(bookNameNotExist),new AccessControlDecisionMakerImpl(bookNameExist));
         List<Boolean> expectedList = new ArrayList<Boolean>(threadCount);
         for (long i = 1; i <= threadCount; i++)
         {
-            expectedList.add(false);
+            expectedList.add(true);
         }        
         List<Boolean> resultList=doThread(acco,bookNameExist);
-        System.out.println("expectedList:"+expectedList);
-        System.out.println("resultList:"+resultList);
+        
         Assert.assertEquals(expectedList, resultList);        
     }
     
     @Test
-    public final void whenPerformMultiAccessCheckForBothExistingBookThenGrandAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
+    public final void whenPerformBothMultiAccessCheckForExistingBookThenGrandAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
     {   
         acco=new AccessControlCoordinator(new AccessControlDecisionMakerImpl(bookNameExist),new AccessControlDecisionMakerImpl(bookNameExist));
         List<Boolean> expectedList = new ArrayList<Boolean>(threadCount);
@@ -133,13 +131,12 @@ public class AccessControlCoordinatorTest
             expectedList.add(true);
         }        
         List<Boolean> resultList=doThread(acco,bookNameExist);
-        System.out.println("expectedList:"+expectedList);
-        System.out.println("resultList:"+resultList);
+        
         Assert.assertEquals(expectedList, resultList);           
     }
     
     @Test
-    public final void whenPerformMultiAccessCheckForNoneExistingBookThenDenyAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
+    public final void whenPerformBothMultiAccessCheckForNoneExistingBookThenDenyAccess() throws AccessControlCoordinatorException, InterruptedException, ExecutionException
     {   
         acco=new AccessControlCoordinator(new AccessControlDecisionMakerImpl(bookNameNotExist),new AccessControlDecisionMakerImpl(bookNameNotExist));
         List<Boolean> expectedList = new ArrayList<Boolean>(threadCount);
@@ -148,8 +145,7 @@ public class AccessControlCoordinatorTest
             expectedList.add(false);
         }        
         List<Boolean> resultList=doThread(acco,bookNameExist);
-        System.out.println("expectedList:"+expectedList);
-        System.out.println("resultList:"+resultList);
+        
         Assert.assertEquals(expectedList, resultList);            
     }
         

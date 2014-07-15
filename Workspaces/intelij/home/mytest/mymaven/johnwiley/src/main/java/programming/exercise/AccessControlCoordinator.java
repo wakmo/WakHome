@@ -19,16 +19,8 @@ public class AccessControlCoordinator
         {
             throw new AccessControlCoordinatorException("Book name cannot be null","-20202");
         }
-        
-        if (this.accessControlDecisionMaker1.performAccessCheck(book) && 
-                this.accessControlDecisionMaker2.performAccessCheck(book))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return this.accessControlDecisionMaker1.performAccessCheck(book) ||
+                this.accessControlDecisionMaker2.performAccessCheck(book);
                 
     }
     

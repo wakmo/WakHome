@@ -13,7 +13,8 @@
     <module>mymaven-deploy</module>
     <module>mymaven-web</module>
     <module>mymaven-core</module>
-    <!-- <module>fixnetix</module> -->
+    <module>fixnetix</module>
+	<module>johnwiley</module>
   </modules>
   
   <properties>

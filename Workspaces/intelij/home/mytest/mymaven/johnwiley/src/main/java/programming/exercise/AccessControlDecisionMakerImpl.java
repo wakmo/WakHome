@@ -20,14 +20,7 @@ public class AccessControlDecisionMakerImpl implements AccessControlDecisionMake
     @Override
     public boolean performAccessCheck(String book)
     {
-        if(bookNameInStore.equals(book))
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        return bookNameInStore.equals(book);
     }
     
 }
