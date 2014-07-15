@@ -1,0 +1,26 @@
+John Wiley Java Programming Exercise
+
+This exercise should take no longer than one hour.
+Feel free to change the supplied code in any way you choose, you may introduce third party libraries 
+if you see necessary.
+You should produce easy-to-read, functionally correct, tested Java code.
+
+It is important that you provide unit tests for the access control coordinator, but the implementation
+of the access control decision makers is not really important for the purposes of this test.
+
+The access control decision makers are threadsafe, and this will run in a multi-threaded environment.
+A book is simply represented as a String.
+
+Story
+To produce a program that coordinates access control to a book in a library.
+The program will grant access to a book if at least one of the two supplied access control decision makers 
+returns a true value.
+
+Acceptance Criteria
+If the first access control decision maker grants access to the book then access is granted.
+If the second access control decision maker grants access to the book then access is granted.
+If both access control decision makers grant access then access to the book is granted.
+If neither access control decision makers grants access then access is not granted.
+If a null value is supplied to the access control coordinator then a checked exception should be thrown.
+
+
