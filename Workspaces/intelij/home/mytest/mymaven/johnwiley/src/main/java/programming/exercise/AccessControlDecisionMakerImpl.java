@@ -10,11 +10,17 @@ package programming.exercise;
  */
 public class AccessControlDecisionMakerImpl implements AccessControlDecisionMaker
 {
+    private final String bookNameInStore;
+    
+    public AccessControlDecisionMakerImpl(String bookName)
+    {
+        this.bookNameInStore=bookName;
+    }
 
     @Override
     public boolean performAccessCheck(String book)
     {
-        if("book".equals(book))
+        if(bookNameInStore.equals(book))
         {
             return true;
         }

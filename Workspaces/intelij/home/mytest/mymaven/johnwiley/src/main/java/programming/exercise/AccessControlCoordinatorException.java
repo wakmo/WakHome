@@ -13,7 +13,9 @@ public class AccessControlCoordinatorException extends Exception
 
     static final long serialVersionUID = -3387516993124229943L;
     private String errorCode;
-
+/**
+ * 
+ */
     public AccessControlCoordinatorException()
     {
         super();
