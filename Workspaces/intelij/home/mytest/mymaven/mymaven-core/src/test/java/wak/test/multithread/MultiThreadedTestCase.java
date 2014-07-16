@@ -14,53 +14,25 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.atomic.AtomicLong;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 public class MultiThreadedTestCase
 {
+    final ThreadSafeUniqueIdGenerator threadSafe = new ThreadSafeUniqueIdGenerator();
+    final ThreadLeakUniqueIdGenerator threadLeak = new ThreadLeakUniqueIdGenerator();
     
-    /**
-     * Generates sequential unique IDs starting with 1, 2, 3, and so on. <p>
-     * This class is NOT thread-safe. </p>
-     */
-    static class BrokenUniqueIdGenerator
+     private void test(final int threadCount) throws InterruptedException, ExecutionException
     {
-        private long counter = 0;
-
-        public long nextId()
-        {
-            return ++counter;
-        }
-    }
-
-    /**
-     * Generates sequential unique IDs starting with 1, 2, 3, and so on. <p>
-     * This class is thread-safe. </p>
-     */
-    static class UniqueIdGenerator
-    {
-        private final AtomicLong counter = new AtomicLong();
-
-        public long nextId()
-        {
-            return counter.incrementAndGet();
-        }
-    }
-
-    private void test(final int threadCount) throws InterruptedException, ExecutionException
-    {
-        final UniqueIdGenerator domainObjectTS = new UniqueIdGenerator();
-        final BrokenUniqueIdGenerator domainObjectTL = new BrokenUniqueIdGenerator();
+        
         Callable<Long> task = new Callable<Long>()
         {
             @Override
             public Long call()
             {
-                return domainObjectTS.nextId();
-                //return domainObjectTL.nextId();
+                return threadSafe.nextId();
+                //return threadLeak.nextId();
             }
         };
         List<Callable<Long>> tasks = Collections.nCopies(threadCount, task);
