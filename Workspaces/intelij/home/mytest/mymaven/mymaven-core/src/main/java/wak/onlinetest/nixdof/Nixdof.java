@@ -4,9 +4,12 @@
  */
 package wak.onlinetest.nixdof;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  *
@@ -25,11 +28,14 @@ public class Nixdof
     }
     void test2()
     {
+        System.out.println("------------- test2 -----------------");
         System.out.println("sum(4) : " + sum(4));
     }
     
     void test3()
     {
+        System.out.println("------------- test3 -----------------");
+        
         boolean isFinished1=true;
         if(isFinished1=true)
         {
@@ -53,6 +59,7 @@ public class Nixdof
     
     void test4()
     {
+        System.out.println("------------- test4 :: Exceptions -----------------");
         //Exceptions
     }
     void test5()
@@ -61,6 +68,7 @@ public class Nixdof
     }
     void test6()
     {
+        System.out.println("------------- test6 -----------------");
         double d=-27.2345;
         System.out.println(Math.ceil(d));
         System.out.println(Math.round(d));
@@ -70,6 +78,7 @@ public class Nixdof
     }
     void test7()
     {
+        System.out.println("------------- test7 :: overridding -----------------");
         //overridding
     }
     public enum Element
@@ -100,22 +109,27 @@ public class Nixdof
     }
     void test8()
     {
+        System.out.println("------------- test8 -----------------");
+        
         System.out.printf("%s,%s,%s",Element.HELIUM,Element.HELIUM.getChemichalSymbol(),Element.HELIUM.getNature());
         System.out.println("");
         //System.out.printf("%s,%s,%s",Element[0],Element[0].chemichalSymbol(),Element[0].nature());
         System.out.println(Element.HELIUM);
         //System.out.printf("%s,%s,%s",Element[1],Element[1].chemichalSymbol(),Element[1].nature());
-         System.out.printf("%s,%s,%s",Element.HELIUM.toString(),Element.HELIUM.getChemichalSymbol(),Element.HELIUM.getNature());
-        
+        System.out.printf("%s,%s,%s",Element.HELIUM.toString(),Element.HELIUM.getChemichalSymbol(),Element.HELIUM.getNature());
+        System.out.println("");
         
         
     }
     void test9()
     {
+        System.out.println("------------- test9 :: file handling & closing -----------------");
         //file handling & closing
     }
     void test10()
     {
+        System.out.println("------------- test10 -----------------");
+        
         System.out.println("abc"=="abc");
         System.out.println("abc".equals("abc"));
         System.out.println(new String("abc")=="abc");
@@ -125,11 +139,14 @@ public class Nixdof
     
     void test11()
     {
+        System.out.println("------------- test11 :: abstract and interface -----------------");
         //abstract and interface
     }
     
     void test12()
     {
+        System.out.println("------------- test12 -----------------");
+        
         int i=2; int j=0;
         j= (i++ + i++)*--i;
         System.out.println("j : "+j);
@@ -137,9 +154,26 @@ public class Nixdof
     
     void test15()
     {
+        System.out.println("------------- test15 -----------------");
+        //Not thread safe
+        Set<String> set=new LinkedHashSet<String>();//return sequencial '3-1-2-' set with unique data
+        //Set<String> set=new HashSet<String>();//return unordered set with unique data
+        //Set<String> set=new TreeSet<String>(); //return ordered '1-2-3-' set with unique data
         
-        Set<String> set=new LinkedHashSet<String>();
-        set.add("3");
+        //Thread safe
+        //Set<String> set=Collections.synchronizedSet(new LinkedHashSet<String>());
+        /*  * @see Collection
+            * @see List
+            * @see SortedSet
+            * @see HashSet
+            * @see TreeSet
+            * @see AbstractSet
+            * @see Collections#singleton(java.lang.Object)
+            * @see Collections#EMPTY_SET
+        */
+        
+        
+        set.add("3");        
         set.add("1");
         set.add("3");
         set.add("2");
@@ -160,7 +194,20 @@ public class Nixdof
 
        Nixdof x=new Nixdof();
        //x.test2();
+       x.test2();
+       x.test3();
+       x.test4();
+       x.test5();
+       x.test6();
+       x.test7();
+       x.test8();
+       x.test9();
+       x.test10();
+       x.test11();
        x.test12();
+       x.test15();
+       
+       
        System.out.println("\nEnded...");
         
 

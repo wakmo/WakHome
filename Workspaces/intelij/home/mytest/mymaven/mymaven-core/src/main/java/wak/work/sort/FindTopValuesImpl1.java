@@ -36,6 +36,10 @@ public class FindTopValuesImpl1 implements FindTopValues1
     public int findMaxValue(Integer[] anyOldOrderValues)
     {
         Arrays.sort(anyOldOrderValues, new ReverseComparator());
+        for(int i=0;i<anyOldOrderValues.length;i++)
+        {
+            System.out.printf("%s,%s", anyOldOrderValues[i],"");
+        }
         return anyOldOrderValues[0];
     }
     
@@ -48,6 +52,7 @@ public class FindTopValuesImpl1 implements FindTopValues1
        return xx;
                 
     }
+    
     
    
     
@@ -62,10 +67,12 @@ public class FindTopValuesImpl1 implements FindTopValues1
        //Arrays.sort(anyOldOrderValues);
        //System.out.println(Arrays.toString(anyOldOrderValues));
        
-       //System.out.println(x.findMaxValue(anyOldOrderValues));        
+       System.out.println(x.findMaxValue(anyOldOrderValues)); 
+       
         
        //System.out.println(Arrays.toString(x.findTopNValues(anyOldOrderValues, 5)));
     }
+
 
     
 }
@@ -79,3 +86,27 @@ class ReverseComparator<T> implements Comparator<Comparable<Object>>
     }
     
 }
+
+class ReverseComparatorStr<T> implements Comparator<String>
+{
+
+    @Override
+    public int compare(String c1, String c2)
+    {        
+        return c2.compareTo(c1);           
+    }
+    
+}
+
+class ReverseComparatorInt<T> implements Comparator<Integer>
+{
+
+    @Override
+    public int compare(Integer c1, Integer c2)
+    {        
+        return c2.compareTo(c1);           
+    }
+    
+}
+
+

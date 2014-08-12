@@ -21,25 +21,25 @@ public class Cat extends Animal implements IAnimal
     {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    /*
-    @Override // Valid
-    protected int getLocalCode(String value,boolean isValidated) throws NumberFormatException
-    {
-        return 5;
-    }*/
-    /*
-    @Override  //Invalid
-    private int getLocalCode(String value,boolean isValidated)
+    
+    //@Override // Valid
+    protected int getLocalCodeX(String value,boolean isValidated) throws NumberFormatException
     {
         return 5;
     }
-    */
-    /*
+    
+    //@Override  //Invalid
+    private int getLocalCodeY(String value,boolean isValidated)
+    {
+        return 5;
+    }
+   
+    
     @Override //Valid
     public int getLocalCode(String value,boolean isValidated)
     {
         return 5;
     }
-    */
+    
     
 }
