@@ -19,17 +19,17 @@
     
   <dependencies>
 	
-        <dependency>
+        <!-- <dependency>
             <groupId>wak.test</groupId>
             <artifactId>mymaven-core</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
             <type>jar</type>
-        </dependency>
+        </dependency> -->
 		
         <dependency>
             <groupId>wak.test</groupId>
             <artifactId>mymaven-web</artifactId>
-            <version>1.0</version>
+            <version>${project.version}</version>
             <type>war</type>
         </dependency>
 		
@@ -41,10 +41,34 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-ear-plugin</artifactId>
         <version>2.6</version>
-        <configuration>
+        
+		<configuration>
             <version>6</version>
             <defaultLibBundleDir>lib</defaultLibBundleDir>
-        </configuration>
+        </configuration> 
+		<!-- 
+		<configuration>
+			<version>5</version>
+			<defaultLibBundleDir>lib</defaultLibBundleDir>
+			<defaultBundleDir>lib</defaultBundleDir>
+			<stripVersion>true</stripVersion>
+			<archive>
+				<index>true</index>
+				<manifest>
+					<addClasspath>true</addClasspath>
+				</manifest>
+			</archive>
+			<modules>
+				<webModule>
+					<groupId>wak.test</groupId>
+					<artifactId>mymaven-web</artifactId>
+					<bundleFileName>mymaven-web.war</bundleFileName>
+				</webModule>
+			</modules>
+			<displayName>${project.artifactId}</displayName>
+			<generateApplicationXml>false</generateApplicationXml>
+		</configuration>
+		-->
       </plugin>
     </plugins>
   </build>
