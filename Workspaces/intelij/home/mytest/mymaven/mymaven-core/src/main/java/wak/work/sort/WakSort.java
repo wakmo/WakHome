@@ -23,7 +23,7 @@ public class WakSort
         Collections.sort(anyOldOrderValues, new ReverseComparatorWak());
         for(int i=0;i<anyOldOrderValues.size();i++)
         {
-            System.out.printf("%s,%s", anyOldOrderValues.get(i),"");
+            System.out.printf("%s,%s" , anyOldOrderValues.get(i),"");
         }
         return anyOldOrderValues.get(0);
     }
