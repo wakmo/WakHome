@@ -85,6 +85,53 @@ public class FileUtils
             {
                 count++;
                 String newExtFileName=validateFileName(String.valueOf(count),newFile,primaryFileNameStartIndex,primaryFileNameEndIndex);
+                System.out.println("newExtFileName : "+newExtFileName);
+                newFile = new File(destinationFilePath, newExtFileName);
+            }
+
+            if (oldFile.renameTo(newFile))
+            {
+                //logger.info("File renamed : from " + oldFile.getAbsoluteFile() + " to " + newFile.getAbsoluteFile());
+                isFileRenamed = true;
+            }
+            else
+            {
+                //logger.warn("File rename failed : from " + oldFile.getAbsoluteFile() + " to " + newFile.getAbsoluteFile());
+            }
+        }
+        else
+        {
+            //logger.warn("File " + oldFile.getAbsoluteFile() + " doesn't exist ");
+        }
+        return isFileRenamed;
+
+    }
+    
+    public static boolean renameFile(String sourceFilePath, String oldFileName, String newFileName, String destinationFilePath,int primaryFileNameStartIndex,int primaryFileNameEndIndex,int suffixLength)
+    {
+        boolean isFileRenamed = false;
+
+        File newFile = new File(destinationFilePath, newFileName.trim());
+        File oldFile = new File(sourceFilePath, oldFileName.trim());
+
+        if (oldFile.exists())
+        {
+            // if file doesnt exists, then create it
+            createFolder(destinationFilePath);
+            int count=0;
+            while (newFile.exists())
+            {
+                count++;
+                String suffix=CommonUtils.getFormattedIndexWithLength(count, suffixLength);
+                String newExtFileName=validateFileName(suffix,newFile,primaryFileNameStartIndex,primaryFileNameEndIndex);
+                System.out.println("newExtFileName : "+newExtFileName);
+                newFile = new File(destinationFilePath, newExtFileName);
+            }
+            if(!newFile.exists())
+            {
+                String suffix=CommonUtils.getFormattedIndexWithLength(0, suffixLength);
+                String newExtFileName=validateFileName(suffix,newFile,primaryFileNameStartIndex,primaryFileNameEndIndex);
+                System.out.println("xnewExtFileName : "+newExtFileName);
                 newFile = new File(destinationFilePath, newExtFileName);
             }
 

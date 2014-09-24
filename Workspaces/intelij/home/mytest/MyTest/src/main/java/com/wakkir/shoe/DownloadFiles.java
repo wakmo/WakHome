@@ -191,11 +191,12 @@ public class DownloadFiles
         boolean keepSameFolderStructure=false;
 
         //String destPath="\\\\fs01\\WakSpace\\Business\\08.eBay\\Pictures\\Shoes\\06.MS-Mark&Spencer\\Boots";
-        String destPath="\\\\fs01\\WakSpace\\Business\\08.eBay\\Pictures\\Shoes\\99.CH-China\\xxx";
+        String destPath="\\\\fs01\\WakSpace\\Business\\00.Pictures\\01.Selling\\Shoes\\99.CH-China\\xxx";
 
         try
         {
             Map<String,String> map=new HashMap<String,String>();
+            /*
             map.put("1381400352_140785201",	"http://g03.s.alicdn.com/kf/HT1Rf5hFDBkXXagOFbXf/220781329/HT1Rf5hFDBkXXagOFbXf.jpg?size=237262&height=1400&width=750&hash=46f122a907fd521399a9ba0f2e1fedbb");
             map.put("1381400352_140785202",	"http://g04.s.alicdn.com/kf/HT1hxWCFuJfXXagOFbXp/220781329/HT1hxWCFuJfXXagOFbXp.jpg?size=207279&height=1772&width=750&hash=cf337eb028b6ce2c1c01bfc854839add");
             map.put("1381400352_140785203",	"http://g01.s.alicdn.com/kf/HT1YHKfFqdmXXagOFbXu/220781329/HT1YHKfFqdmXXagOFbXu.jpg?size=195241&height=1015&width=1000&hash=b504c81cc58f339684cf033df31b8635");
@@ -251,7 +252,41 @@ public class DownloadFiles
             map.put("IMG_0676",				"http://g01.s.alicdn.com/kf/HTB1J0wMFFXXXXXpapXXq6xXFXXXg/220781329/HTB1J0wMFFXXXXXpapXXq6xXFXXXg.jpg?size=85378&height=858&width=1000&hash=a282dd779d91653cf8ee4a46b30d15c7"        );
             map.put("IMG_0677",				"http://g01.s.alicdn.com/kf/HTB17RFeFVXXXXcLXXXXq6xXFXXXd/220781329/HTB17RFeFVXXXXcLXXXXq6xXFXXXd.jpg?size=124909&height=731&width=1000&hash=ce59d6658dcad0b013deb809a27c3f5f"       );
             map.put("IMG_0678",				"http://g01.s.alicdn.com/kf/HTB1yyhfFVXXXXXoXXXXq6xXFXXXS/220781329/HTB1yyhfFVXXXXXoXXXXq6xXFXXXS.jpg?size=70129&height=732&width=1000&hash=fce7651296ce0aeeb7163af7e265c74b"        );
+            */
+            /*
+            map.put("BWN0BTDFRSN00-01","http://g02.a.alicdn.com/kf/HTB1tO2yGXXXXXaVXFXXq6xXFXXXf/221200747/HTB1tO2yGXXXXXaVXFXXq6xXFXXXf.jpg");
+            map.put("BWN0BTDFRSN00-02","http://g03.a.alicdn.com/kf/HTB1m7jBGXXXXXbcXpXXq6xXFXXXo/221200747/HTB1m7jBGXXXXXbcXpXXq6xXFXXXo.jpg");
+            map.put("BWN0BTDFRSN00-03","http://g02.a.alicdn.com/kf/HTB1Vq6AGXXXXXcAXXXXq6xXFXXX8/221200747/HTB1Vq6AGXXXXXcAXXXXq6xXFXXX8.jpg");
+            map.put("BWN0BTDFRSN00-04","http://g01.a.alicdn.com/kf/HTB1nnDEGXXXXXbsXXXXq6xXFXXXN/221200747/HTB1nnDEGXXXXXbsXXXXq6xXFXXXN.jpg");
+            */
+            map.put("01","http://g04.s.alicdn.com/kf/HTB1HKecFVXXXXXTXXXXq6xXFXXXO/202576724/HTB1HKecFVXXXXXTXXXXq6xXFXXXO.jpg?size=362449&height=4324&width=640&hash=4bb9590ce17f375781b225f1d2a9b23d"  );
+            map.put("02","http://g02.s.alicdn.com/kf/HTB1QcicFVXXXXXsXXXXq6xXFXXXU/202576724/HTB1QcicFVXXXXXsXXXXq6xXFXXXU.jpg?size=279791&height=3708&width=640&hash=0a66c983ab5add5242f16d0e9d463f83"  );
+            map.put("03","http://g02.a.alicdn.com/kf/HTB1kWodGXXXXXa9XXXXq6xXFXXXq/202576724/HTB1kWodGXXXXXa9XXXXq6xXFXXXq.jpg?size=397094&height=3768&width=640&hash=4e8b7745328f7e619a5693ca1eff1869"  );
+            map.put("04","http://g02.a.alicdn.com/kf/HTB1BPT_GXXXXXbHXpXXq6xXFXXXR/202576724/HTB1BPT_GXXXXXbHXpXXq6xXFXXXR.jpg?size=489432&height=4120&width=640&hash=320366593193ef6a9540544750ef6be7"  );
+            map.put("05","http://g01.a.alicdn.com/kf/HTB1_X_8GXXXXXa4XFXXq6xXFXXXE/202576724/HTB1_X_8GXXXXXa4XFXXq6xXFXXXE.jpg?size=493295&height=3132&width=640&hash=540755a59acf4075711a6832ee56368d"  );
+            map.put("06","http://g01.a.alicdn.com/kf/HTB1xLAcGXXXXXbQXXXXq6xXFXXXJ/202576724/HTB1xLAcGXXXXXbQXXXXq6xXFXXXJ.jpg?size=366849&height=3276&width=640&hash=246e9ced2c8b36eba567b20348b75840"  );
+            map.put("07","http://g02.a.alicdn.com/kf/HTB110.XGXXXXXX.XpXXq6xXFXXX0/202576724/HTB110.XGXXXXXX.XpXXq6xXFXXX0.jpg?size=43146&height=640&width=640&hash=8809828a3051187c6c5202aa204293b8"    );
+            map.put("08","http://g02.a.alicdn.com/kf/HTB1Qu7bGXXXXXcOXXXXq6xXFXXXG/202576724/HTB1Qu7bGXXXXXcOXXXXq6xXFXXXG.jpg?size=44763&height=640&width=640&hash=7dfb0cf0b09a20b2d603644bd9e1d006"    );
+            map.put("09","http://g02.a.alicdn.com/kf/HTB1P8v6GXXXXXcfXFXXq6xXFXXXA/202576724/HTB1P8v6GXXXXXcfXFXXq6xXFXXXA.jpg?size=38183&height=640&width=640&hash=d03f2bba94b72f6623dc6d3fabf060c3"    );
+            map.put("10","http://g03.a.alicdn.com/kf/HTB1HSD3GXXXXXXGXVXXq6xXFXXXm/202576724/HTB1HSD3GXXXXXXGXVXXq6xXFXXXm.jpg?size=42030&height=640&width=640&hash=0817d751e437d1fa6b9416e092332c96"    );
+            map.put("11","http://g02.a.alicdn.com/kf/HTB1cx24GXXXXXXRXVXXq6xXFXXXy/202576724/HTB1cx24GXXXXXXRXVXXq6xXFXXXy.jpg?size=78900&height=640&width=640&hash=b80a36e3f9ed5cc0a828360b45d30c18"    );
+            map.put("12","http://g02.a.alicdn.com/kf/HTB1id7XGXXXXXaHXpXXq6xXFXXXc/202576724/HTB1id7XGXXXXXaHXpXXq6xXFXXXc.jpg?size=74043&height=640&width=640&hash=e0850a648e4acd9ce6b1bd0ea344947c"    );
+            map.put("13","http://g01.a.alicdn.com/kf/HTB1VpIdGXXXXXa5XXXXq6xXFXXXT/202576724/HTB1VpIdGXXXXXa5XXXXq6xXFXXXT.jpg?size=78168&height=640&width=640&hash=db72143a9725ac3cae36d36762da1d00"    );
+            map.put("14","http://g02.a.alicdn.com/kf/HTB1n6n.GXXXXXbbXpXXq6xXFXXXb/202576724/HTB1n6n.GXXXXXbbXpXXq6xXFXXXb.jpg?size=80367&height=640&width=640&hash=3fb6a64cc32d8a39dc901044c1599cb1"    );
+            map.put("15","http://g01.a.alicdn.com/kf/HTB1vJf4GXXXXXXIXVXXq6xXFXXXK/202576724/HTB1vJf4GXXXXXXIXVXXq6xXFXXXK.jpg?size=62851&height=640&width=640&hash=062c5b642baba6277c3af0756ee3223a"    );
+            map.put("16","http://g02.a.alicdn.com/kf/HTB1HYY6GXXXXXc4XFXXq6xXFXXXs/202576724/HTB1HYY6GXXXXXc4XFXXq6xXFXXXs.jpg?size=72699&height=640&width=640&hash=bd0b22b88e3e5f368b8126aa979849ad"    );
+            map.put("17","http://g02.a.alicdn.com/kf/HTB1kuAdGXXXXXaVXXXXq6xXFXXX7/202576724/HTB1kuAdGXXXXXaVXXXXq6xXFXXX7.jpg?size=589935&height=4153&width=640&hash=5e47f306e8c4f0788a4f7df7932ead0d"  );
+            map.put("18","http://g03.a.alicdn.com/kf/HTB1b67bGXXXXXcKXXXXq6xXFXXXc/202576724/HTB1b67bGXXXXXcKXXXXq6xXFXXXc.jpg?size=263192&height=3328&width=640&hash=b2ccc96dd1dd37b76d3361c138dd5d1f"  );
+            map.put("19","http://g02.a.alicdn.com/kf/HTB1KGMcGXXXXXccXXXXq6xXFXXXS/202576724/HTB1KGMcGXXXXXccXXXXq6xXFXXXS.jpg?size=539311&height=5000&width=647&hash=ffde78a75efdfc53bd62dbb21858b0a4"  );
+            map.put("20","http://g02.a.alicdn.com/kf/HTB1xU65GXXXXXcNXFXXq6xXFXXXh/202576724/HTB1xU65GXXXXXcNXFXXq6xXFXXXh.jpg?size=505599&height=5000&width=648&hash=685f60206e988de4049e4cbb7b4b3d82"  );
+            map.put("21","http://g02.a.alicdn.com/kf/HTB1ZEUcGXXXXXaUXXXXq6xXFXXX5/202576724/HTB1ZEUcGXXXXXaUXXXXq6xXFXXX5.jpg?size=312525&height=4225&width=640&hash=b1628c98270321f53574d4966e3e4c25"  );
+            map.put("22","http://g03.a.alicdn.com/kf/HTB1nbn8GXXXXXajXFXXq6xXFXXXq/202576724/HTB1nbn8GXXXXXajXFXXq6xXFXXXq.jpg?size=246459&height=4458&width=640&hash=82db4997885d60ef365c1143d3801be4"  );
+            map.put("23","http://g04.a.alicdn.com/kf/HTB1sCT6GXXXXXciXFXXq6xXFXXXL/202576724/HTB1sCT6GXXXXXciXFXXq6xXFXXXL.jpg?size=544077&height=4683&width=640&hash=ebb6e845cdaccb9fbdc3be40a198e2ff"  );
+            map.put("24","http://g02.a.alicdn.com/kf/HTB1isH6GXXXXXcRXFXXq6xXFXXX6/202576724/HTB1isH6GXXXXXcRXFXXq6xXFXXX6.jpg?size=482562&height=4629&width=640&hash=ef8238a4eb2a7285503e9d5b8c17520f"  );
+            map.put("25","http://g04.a.alicdn.com/kf/HTB1DKUeGXXXXXXPXXXXq6xXFXXXq/202576724/HTB1DKUeGXXXXXXPXXXXq6xXFXXXq.jpg?size=315874&height=4004&width=640&hash=460696083ccae310b04984b23d594c19"  );
+            map.put("26","http://g01.a.alicdn.com/kf/HTB1ZRH4GXXXXXXJXVXXq6xXFXXXQ/202576724/HTB1ZRH4GXXXXXXJXVXXq6xXFXXXQ.jpg?size=296887&height=3724&width=640&hash=b6588bc415c9973fba88f16a5835dc57"  );
 
+            
             Set keys=map.keySet();
             Iterator<String> it=keys.iterator();
             StringBuffer sb=new StringBuffer();

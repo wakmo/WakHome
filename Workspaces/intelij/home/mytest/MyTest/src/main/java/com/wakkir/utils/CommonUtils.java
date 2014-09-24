@@ -15,9 +15,21 @@ public class CommonUtils
     public static String getFormattedIndex(int index)
     {
         try
+        {            
+            return "Id:"+getFormattedIndexWithLength(index,4)+", ";
+        }
+        catch(Exception ex)
+        {
+            return "";
+        }
+    }
+    
+    public static String getFormattedIndexWithLength(int index,int length)
+    {
+        try
         {
             String fixedString="000000"+index;
-            return "Id:"+fixedString.substring(fixedString.length()-4,fixedString.length())+", ";
+            return fixedString.substring(fixedString.length()-length,fixedString.length());
         }
         catch(Exception ex)
         {
