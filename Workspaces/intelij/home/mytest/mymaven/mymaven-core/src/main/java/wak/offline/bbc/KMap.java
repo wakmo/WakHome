@@ -16,7 +16,7 @@ public class KMap
                                                {1,0,0,1},
                                                {0,1,0,0},
                                                {0,0,0,0}};
-       int[] cellCount=new int[region3.length]
+       int[] cellCount=new int[region3.length];
         for (int row = 0; row < region3.length; row++)        
         {
            int countRow=0;
