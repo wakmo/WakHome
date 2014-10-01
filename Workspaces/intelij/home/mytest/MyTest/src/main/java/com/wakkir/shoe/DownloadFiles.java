@@ -191,7 +191,7 @@ public class DownloadFiles
         boolean keepSameFolderStructure=false;
 
         //String destPath="\\\\fs01\\WakSpace\\Business\\08.eBay\\Pictures\\Shoes\\06.MS-Mark&Spencer\\Boots";
-        String destPath="\\\\fs01\\WakSpace\\Business\\00.Pictures\\01.Selling\\Shoes\\99.CH-China\\xxx";
+        String destPath="\\\\fs01\\WakSpace\\Business\\00.Pictures\\01.Selling\\Shoes\\99.CH-China\\xx5";
 
         try
         {
@@ -259,6 +259,7 @@ public class DownloadFiles
             map.put("BWN0BTDFRSN00-03","http://g02.a.alicdn.com/kf/HTB1Vq6AGXXXXXcAXXXXq6xXFXXX8/221200747/HTB1Vq6AGXXXXXcAXXXXq6xXFXXX8.jpg");
             map.put("BWN0BTDFRSN00-04","http://g01.a.alicdn.com/kf/HTB1nnDEGXXXXXbsXXXXq6xXFXXXN/221200747/HTB1nnDEGXXXXXbsXXXXq6xXFXXXN.jpg");
             */
+            /*
             map.put("01","http://g04.s.alicdn.com/kf/HTB1HKecFVXXXXXTXXXXq6xXFXXXO/202576724/HTB1HKecFVXXXXXTXXXXq6xXFXXXO.jpg?size=362449&height=4324&width=640&hash=4bb9590ce17f375781b225f1d2a9b23d"  );
             map.put("02","http://g02.s.alicdn.com/kf/HTB1QcicFVXXXXXsXXXXq6xXFXXXU/202576724/HTB1QcicFVXXXXXsXXXXq6xXFXXXU.jpg?size=279791&height=3708&width=640&hash=0a66c983ab5add5242f16d0e9d463f83"  );
             map.put("03","http://g02.a.alicdn.com/kf/HTB1kWodGXXXXXa9XXXXq6xXFXXXq/202576724/HTB1kWodGXXXXXa9XXXXq6xXFXXXq.jpg?size=397094&height=3768&width=640&hash=4e8b7745328f7e619a5693ca1eff1869"  );
@@ -285,7 +286,15 @@ public class DownloadFiles
             map.put("24","http://g02.a.alicdn.com/kf/HTB1isH6GXXXXXcRXFXXq6xXFXXX6/202576724/HTB1isH6GXXXXXcRXFXXq6xXFXXX6.jpg?size=482562&height=4629&width=640&hash=ef8238a4eb2a7285503e9d5b8c17520f"  );
             map.put("25","http://g04.a.alicdn.com/kf/HTB1DKUeGXXXXXXPXXXXq6xXFXXXq/202576724/HTB1DKUeGXXXXXXPXXXXq6xXFXXXq.jpg?size=315874&height=4004&width=640&hash=460696083ccae310b04984b23d594c19"  );
             map.put("26","http://g01.a.alicdn.com/kf/HTB1ZRH4GXXXXXXJXVXXq6xXFXXXQ/202576724/HTB1ZRH4GXXXXXXJXVXXq6xXFXXXQ.jpg?size=296887&height=3724&width=640&hash=b6588bc415c9973fba88f16a5835dc57"  );
-
+            */
+            map.put("01","http://i00.i.aliimg.com/img/pb/260/072/821/821072260_165.jpg");
+            map.put("02","http://i00.i.aliimg.com/img/pb/324/072/821/821072324_399.jpg");
+            map.put("03","http://i01.i.aliimg.com/img/pb/358/072/821/821072358_362.jpg");
+            map.put("04","http://i01.i.aliimg.com/img/pb/406/072/821/821072406_487.jpg");
+            map.put("05","http://i00.i.aliimg.com/img/pb/458/072/821/821072458_254.jpg");
+            map.put("06","http://i01.i.aliimg.com/img/pb/492/072/821/821072492_013.jpg");
+            map.put("07","http://i01.i.aliimg.com/img/pb/507/072/821/821072507_872.jpg");
+            map.put("08","http://i01.i.aliimg.com/img/pb/536/072/821/821072536_441.jpg");
             
             Set keys=map.keySet();
             Iterator<String> it=keys.iterator();
