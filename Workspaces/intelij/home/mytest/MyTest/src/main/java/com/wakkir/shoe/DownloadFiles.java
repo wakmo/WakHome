@@ -191,7 +191,7 @@ public class DownloadFiles
         boolean keepSameFolderStructure=false;
 
         //String destPath="\\\\fs01\\WakSpace\\Business\\08.eBay\\Pictures\\Shoes\\06.MS-Mark&Spencer\\Boots";
-        String destPath="\\\\fs01\\WakSpace\\Business\\00.Pictures\\01.Selling\\Shoes\\99.CH-China\\xx5";
+        //String destPath="\\\\fs01\\WakSpace\\Business\\00.Pictures\\01.Selling\\Shoes\\99.CH-China\\xx5";
 
         try
         {
@@ -287,6 +287,7 @@ public class DownloadFiles
             map.put("25","http://g04.a.alicdn.com/kf/HTB1DKUeGXXXXXXPXXXXq6xXFXXXq/202576724/HTB1DKUeGXXXXXXPXXXXq6xXFXXXq.jpg?size=315874&height=4004&width=640&hash=460696083ccae310b04984b23d594c19"  );
             map.put("26","http://g01.a.alicdn.com/kf/HTB1ZRH4GXXXXXXJXVXXq6xXFXXXQ/202576724/HTB1ZRH4GXXXXXXJXVXXq6xXFXXXQ.jpg?size=296887&height=3724&width=640&hash=b6588bc415c9973fba88f16a5835dc57"  );
             */
+            /*
             map.put("01","http://i00.i.aliimg.com/img/pb/260/072/821/821072260_165.jpg");
             map.put("02","http://i00.i.aliimg.com/img/pb/324/072/821/821072324_399.jpg");
             map.put("03","http://i01.i.aliimg.com/img/pb/358/072/821/821072358_362.jpg");
@@ -295,6 +296,43 @@ public class DownloadFiles
             map.put("06","http://i01.i.aliimg.com/img/pb/492/072/821/821072492_013.jpg");
             map.put("07","http://i01.i.aliimg.com/img/pb/507/072/821/821072507_872.jpg");
             map.put("08","http://i01.i.aliimg.com/img/pb/536/072/821/821072536_441.jpg");
+            */
+            
+            String destPath="\\\\fs01\\WakSpace\\Business\\00.Pictures\\01.Selling\\Shoes\\99.CH-China\\xx6";
+            /*
+            map.put("01","http://i01.i.aliimg.com/img/pb/022/780/178/1178780022_821.jpg?size=78499&height=800&width=800&hash=636efb4e148b798f0be6bd7853493fc3");
+            map.put("02","http://i01.i.aliimg.com/img/pb/777/700/176/1176700777_721.jpg?size=88491&height=800&width=800&hash=60d71a4146e96d92ce93da356b501037");
+            map.put("03","http://i00.i.aliimg.com/img/pb/783/700/176/1176700783_824.jpg?size=82648&height=896&width=896&hash=c9135966310da40fb94a35e5b00cb5bf");
+            map.put("04","http://i01.i.aliimg.com/img/pb/788/700/176/1176700788_781.jpg?size=102081&height=800&width=800&hash=88bc986e81acefbd243ffa141d18db8c");
+            map.put("05","http://i01.i.aliimg.com/img/pb/003/780/178/1178780003_781.jpg?size=110634&height=800&width=800&hash=5de76adf8ab81e369409165872524218");
+            map.put("06","http://i00.i.aliimg.com/img/pb/794/700/176/1176700794_224.jpg?size=59515&height=800&width=800&hash=0f6acfd657e39edcc8d275db6bdb2e2b");
+            map.put("07","http://i00.i.aliimg.com/img/pb/770/700/176/1176700770_215.jpg?size=70045&height=800&width=800&hash=84458fbcdd5d66d8b2e37c158c05fdb1");
+            map.put("08","http://i01.i.aliimg.com/img/pb/007/780/178/1178780007_323.jpg?size=91917&height=800&width=800&hash=ac203b0b4845109af551f228cca12569");
+            map.put("09","http://i01.i.aliimg.com/img/pb/765/700/176/1176700765_432.jpg?size=111204&height=800&width=800&hash=fd4613eb6d46bb5db38cceb8142dd0a1");
+            map.put("10","http://i00.i.aliimg.com/img/pb/775/700/176/1176700775_753.jpg?size=85277&height=800&width=800&hash=c9047bfb0133946128b51727e1e19836");
+            map.put("11","http://i01.i.aliimg.com/img/pb/464/525/194/1194525464_628.jpg?size=81904&height=800&width=800&hash=2c9bb7403f681cd23bef513997dda27c");
+            map.put("12","http://i00.i.aliimg.com/img/pb/773/700/176/1176700773_438.jpg?size=82518&height=800&width=800&hash=4c41703758a0b75b89b820b6235ad22b");
+            map.put("13","http://i01.i.aliimg.com/img/pb/018/780/178/1178780018_275.jpg?size=82737&height=800&width=800&hash=5c20b6502fabdc5745bb94d63d48da9d");
+            map.put("14","http://i00.i.aliimg.com/img/pb/780/700/176/1176700780_032.jpg?size=53358&height=800&width=800&hash=37a5d3d4fe6b47af7a80c0c87f37f149");
+            map.put("15","http://i01.i.aliimg.com/wsphoto/v0/1755500487_1/2-kinds-of-wear-law-fashion-Pumps-2014-Summer-new-lady-sexy-high-heels-Rhinestone-Slides.jpg");
+            map.put("16","http://i01.i.aliimg.com/wsphoto/v0/1755500487_2/2-kinds-of-wear-law-fashion-Pumps-2014-Summer-new-lady-sexy-high-heels-Rhinestone-Slides.jpg");
+            map.put("17","http://i01.i.aliimg.com/wsphoto/v0/1755500487_3/2-kinds-of-wear-law-fashion-Pumps-2014-Summer-new-lady-sexy-high-heels-Rhinestone-Slides.jpg");
+            map.put("18","http://i01.i.aliimg.com/wsphoto/v0/1755500487_4/2-kinds-of-wear-law-fashion-Pumps-2014-Summer-new-lady-sexy-high-heels-Rhinestone-Slides.jpg");
+            map.put("19","http://i01.i.aliimg.com/wsphoto/v0/1755500487_5/2-kinds-of-wear-law-fashion-Pumps-2014-Summer-new-lady-sexy-high-heels-Rhinestone-Slides.jpg");
+            map.put("20","http://i01.i.aliimg.com/wsphoto/v0/1755500487_6/2-kinds-of-wear-law-fashion-Pumps-2014-Summer-new-lady-sexy-high-heels-Rhinestone-Slides.jpg");
+            */
+            map.put("6-1","http://i00.i.aliimg.com/img/pb/698/236/017/1017236698_126.jpg?size=59671&height=600&width=600&hash=70809d643a3a2dd4f908b788b180a45f");
+            map.put("6-2","http://i01.i.aliimg.com/img/pb/388/688/017/1017688388_485.jpg?size=70376&height=600&width=600&hash=4a41cd672e90377ff0464cedb863ef1d");
+            map.put("6-3","http://i00.i.aliimg.com/img/pb/380/688/017/1017688380_938.jpg?size=57426&height=600&width=600&hash=3b72aa912aa6b1cb16466f0b6239b8cb");
+            map.put("6-4","http://i01.i.aliimg.com/img/pb/386/688/017/1017688386_498.jpg?size=55600&height=600&width=600&hash=dc4e8eed008b3ace84a06003fd0f6e6b");
+            map.put("6-5","http://i00.i.aliimg.com/img/pb/385/688/017/1017688385_344.jpg?size=74915&height=600&width=600&hash=5d0166ce9b4aab4cfad693d9b7ce1ffe");
+            map.put("6-6","http://i01.i.aliimg.com/img/pb/768/169/016/1016169768_497.jpg?size=68643&height=600&width=600&hash=da94b3d7425cb6f2b7b27880f897b03e");
+            map.put("6-7","http://i00.i.aliimg.com/img/pb/781/169/016/1016169781_972.jpg?size=54465&height=600&width=600&hash=a3484c04ae63471b01072a437141bc60");
+            map.put("6-8","http://i00.i.aliimg.com/img/pb/708/236/017/1017236708_166.jpg?size=57116&height=600&width=600&hash=43e13d561149c1e9c086f536c17e0374");
+            map.put("6-9","http://i01.i.aliimg.com/img/pb/706/236/017/1017236706_226.jpg?size=59003&height=600&width=600&hash=65932ac5f3fb04d5ba8c07563bb797a2");
+            map.put("x1","http://g02.a.alicdn.com/kf/HTB1fvCgGXXXXXXPXVXXq6xXFXXXn/220231271/HTB1fvCgGXXXXXXPXVXXq6xXFXXXn.jpg?size=73374&height=244&width=959&hash=d931680f04807cd89f32b5c4ea313acb");
+            map.put("x2","http://g02.a.alicdn.com/kf/HTB127mjGXXXXXcBXFXXq6xXFXXXG/220231271/HTB127mjGXXXXXcBXFXXq6xXFXXXG.jpg?size=57577&height=365&width=957&hash=78c6519ff2dfc840f6c35c914bb5a73d");
+            map.put("x3","http://g03.a.alicdn.com/kf/HTB1uaOlGXXXXXXsXFXXq6xXFXXX4/220231271/HTB1uaOlGXXXXXXsXFXXq6xXFXXX4.jpg?size=92589&height=465&width=956&hash=32cbc44189d82f776a7a06af4ea09ea1");
             
             Set keys=map.keySet();
             Iterator<String> it=keys.iterator();
