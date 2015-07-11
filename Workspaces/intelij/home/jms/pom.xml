@@ -10,6 +10,8 @@
     </dependencies>
     <modules>
         <module>JMSExample</module>        		
+        <module>JMSSpring</module>        		
+        <module>RabbitMQSample</module>        		
     </modules>
 
 </project>

@@ -1,0 +1,174 @@
+
+package com.platform7.securecrypto.xmlinterface.generated;
+
+import javax.xml.bind.*;
+import javax.xml.marshal.XMLScanner;
+import javax.xml.marshal.XMLWriter;
+import java.io.IOException;
+import java.io.InputStream;
+
+/**
+ * Obsolete JAXB-1.0ea version 
+ */
+public class XMLSCIKeyUsage
+    extends MarshallableObject
+    implements Element
+{
+
+    private String _Algorithm;
+    private String _Usage;
+
+    public String getAlgorithm() {
+        return _Algorithm;
+    }
+
+    public void setAlgorithm(String _Algorithm) {
+        this._Algorithm = _Algorithm;
+        if (_Algorithm == null) {
+            invalidate();
+        }
+    }
+
+    public String getUsage() {
+        return _Usage;
+    }
+
+    public void setUsage(String _Usage) {
+        this._Usage = _Usage;
+        if (_Usage == null) {
+            invalidate();
+        }
+    }
+
+    public void validateThis()
+        throws LocalValidationException
+    {
+        if (_Algorithm == null) {
+            throw new MissingAttributeException("Algorithm");
+        }
+        if (_Usage == null) {
+            throw new MissingAttributeException("Usage");
+        }
+    }
+
+    public void validate(Validator v)
+        throws StructureValidationException
+    {
+    }
+
+    public void marshal(Marshaller m)
+        throws IOException
+    {
+        XMLWriter w = m.writer();
+        w.start("KeyUsage");
+        w.attribute("Algorithm", _Algorithm.toString());
+        w.attribute("Usage", _Usage.toString());
+        w.end("KeyUsage");
+    }
+
+    public void unmarshal(Unmarshaller u)
+        throws UnmarshalException
+    {
+        XMLScanner xs = u.scanner();
+        Validator v = u.validator();
+        xs.takeStart("KeyUsage");
+        while (xs.atAttribute()) {
+            String an = xs.takeAttributeName();
+            if (an.equals("Algorithm")) {
+                if (_Algorithm!= null) {
+                    throw new DuplicateAttributeException(an);
+                }
+                _Algorithm = xs.takeAttributeValue();
+                continue;
+            }
+            if (an.equals("Usage")) {
+                if (_Usage!= null) {
+                    throw new DuplicateAttributeException(an);
+                }
+                _Usage = xs.takeAttributeValue();
+                continue;
+            }
+            throw new InvalidAttributeException(an);
+        }
+        xs.takeEnd("KeyUsage");
+    }
+
+    public static XMLSCIKeyUsage unmarshal(InputStream in)
+        throws UnmarshalException
+    {
+        return unmarshal(XMLScanner.open(in));
+    }
+
+    public static XMLSCIKeyUsage unmarshal(XMLScanner xs)
+        throws UnmarshalException
+    {
+        return unmarshal(xs, newDispatcher());
+    }
+
+    public static XMLSCIKeyUsage unmarshal(XMLScanner xs, Dispatcher d)
+        throws UnmarshalException
+    {
+        return ((XMLSCIKeyUsage) d.unmarshal(xs, (XMLSCIKeyUsage.class)));
+    }
+
+    public boolean equals(Object ob) {
+        if (this == ob) {
+            return true;
+        }
+        if (!(ob instanceof XMLSCIKeyUsage)) {
+            return false;
+        }
+        XMLSCIKeyUsage tob = ((XMLSCIKeyUsage) ob);
+        if (_Algorithm!= null) {
+            if (tob._Algorithm == null) {
+                return false;
+            }
+            if (!_Algorithm.equals(tob._Algorithm)) {
+                return false;
+            }
+        } else {
+            if (tob._Algorithm!= null) {
+                return false;
+            }
+        }
+        if (_Usage!= null) {
+            if (tob._Usage == null) {
+                return false;
+            }
+            if (!_Usage.equals(tob._Usage)) {
+                return false;
+            }
+        } else {
+            if (tob._Usage!= null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int hashCode() {
+        int h = 0;
+        h = ((127 *h)+((_Algorithm!= null)?_Algorithm.hashCode(): 0));
+        h = ((127 *h)+((_Usage!= null)?_Usage.hashCode(): 0));
+        return h;
+    }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer("<<KeyUsage");
+        if (_Algorithm!= null) {
+            sb.append(" Algorithm=");
+            sb.append(_Algorithm.toString());
+        }
+        if (_Usage!= null) {
+            sb.append(" Usage=");
+            sb.append(_Usage.toString());
+        }
+        sb.append(">>");
+        return sb.toString();
+    }
+
+    public static Dispatcher newDispatcher() {
+        return XMLSCIKeyData.newDispatcher();
+    }
+
+}

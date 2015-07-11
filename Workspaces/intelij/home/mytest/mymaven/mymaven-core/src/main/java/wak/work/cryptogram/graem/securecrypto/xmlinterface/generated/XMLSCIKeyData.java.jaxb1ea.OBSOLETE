@@ -1,0 +1,548 @@
+
+package com.platform7.securecrypto.xmlinterface.generated;
+
+import com.platform7.common.utilities.ByteArrayUtilities;
+
+import javax.xml.bind.*;
+import javax.xml.marshal.XMLScanner;
+import javax.xml.marshal.XMLWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+/**
+ * Obsolete JAXB-1.0ea version 
+ */
+public class XMLSCIKeyData
+    extends MarshallableRootElement
+    implements RootElement
+{
+
+    private Object _MKIdentifier;
+    private String _SMType;
+    private List _KeyUsage = PredicatedLists.createInvalidating(this, new KeyUsagePredicate(), new ArrayList());
+    private PredicatedLists.Predicate pred_KeyUsage = new KeyUsagePredicate();
+    private String _Component;
+    private String _KeyType;
+    private String _KeySize;
+    private String _CryptoEngineVersion;
+    private Object _SMExtension;
+    private Object _SCIKeyValue;
+
+    public Object getMKIdentifier() {
+        return _MKIdentifier;
+    }
+
+    public void setMKIdentifier(Object _MKIdentifier) {
+        this._MKIdentifier = _MKIdentifier;
+        if (_MKIdentifier == null) {
+            invalidate();
+        }
+    }
+
+    public String getSMType() {
+        return _SMType;
+    }
+
+    public void setSMType(String _SMType) {
+        this._SMType = _SMType;
+        if (_SMType == null) {
+            invalidate();
+        }
+    }
+
+    public List getKeyUsage() {
+        return _KeyUsage;
+    }
+
+    public void deleteKeyUsage() {
+        _KeyUsage = null;
+        invalidate();
+    }
+
+    public void emptyKeyUsage() {
+        _KeyUsage = PredicatedLists.createInvalidating(this, pred_KeyUsage, new ArrayList());
+    }
+
+    public String getComponent() {
+        return _Component;
+    }
+
+    public void setComponent(String _Component) {
+        this._Component = _Component;
+        if (_Component == null) {
+            invalidate();
+        }
+    }
+
+    public String getKeyType() {
+        return _KeyType;
+    }
+
+    public void setKeyType(String _KeyType) {
+        this._KeyType = _KeyType;
+        if (_KeyType == null) {
+            invalidate();
+        }
+    }
+
+    public String getKeySize() {
+        return _KeySize;
+    }
+
+    public void setKeySize(String _KeySize) {
+        this._KeySize = _KeySize;
+        if (_KeySize == null) {
+            invalidate();
+        }
+    }
+
+    public String getCryptoEngineVersion() {
+        return _CryptoEngineVersion;
+    }
+
+    public void setCryptoEngineVersion(String _CryptoEngineVersion) {
+        this._CryptoEngineVersion = _CryptoEngineVersion;
+        if (_CryptoEngineVersion == null) {
+            invalidate();
+        }
+    }
+
+    public Object getSMExtension() {
+        return _SMExtension;
+    }
+
+    public void setSMExtension(Object _SMExtension) {
+        this._SMExtension = _SMExtension;
+        if (_SMExtension == null) {
+            invalidate();
+        }
+    }
+
+    public Object getSCIKeyValue() {
+        return _SCIKeyValue;
+    }
+
+    public void setSCIKeyValue(Object _SCIKeyValue) {
+        this._SCIKeyValue = _SCIKeyValue;
+        if (_SCIKeyValue == null) {
+            invalidate();
+        }
+    }
+
+    public void validateThis()
+        throws LocalValidationException
+    {
+        if (_MKIdentifier == null) {
+            throw new MissingContentException("MKIdentifier");
+        }
+        if (_SMType == null) {
+            throw new MissingContentException("SMType");
+        }
+        if (_KeyUsage == null) {
+            throw new MissingContentException("KeyUsage");
+        }
+        if (_Component == null) {
+            throw new MissingContentException("Component");
+        }
+        if (_KeyType == null) {
+            throw new MissingContentException("KeyType");
+        }
+        if (_KeySize == null) {
+            throw new MissingContentException("KeySize");
+        }
+        if (_CryptoEngineVersion == null) {
+            throw new MissingContentException("CryptoEngineVersion");
+        }
+        if (_SCIKeyValue == null) {
+            throw new MissingContentException("SCIKeyValue");
+        }
+    }
+
+    public void validate(Validator v)
+        throws StructureValidationException
+    {
+        for (Iterator i = _KeyUsage.iterator(); i.hasNext(); ) {
+            v.validate(((ValidatableObject) i.next()));
+        }
+    }
+
+    public void marshal(Marshaller m)
+        throws IOException
+    {
+        XMLWriter w = m.writer();
+        w.start("SCIKeyData");
+        w.leaf("MKIdentifier", ByteArrayUtilities.print(_MKIdentifier));
+        w.leaf("SMType", _SMType.toString());
+        for (Iterator i = _KeyUsage.iterator(); i.hasNext(); ) {
+            m.marshal(((MarshallableObject) i.next()));
+        }
+        w.leaf("Component", _Component.toString());
+        w.leaf("KeyType", _KeyType.toString());
+        w.leaf("KeySize", _KeySize.toString());
+        w.leaf("CryptoEngineVersion", _CryptoEngineVersion.toString());
+        if (_SMExtension!= null) {
+            w.leaf("SMExtension", ByteArrayUtilities.print(_SMExtension));
+        }
+        w.leaf("SCIKeyValue", ByteArrayUtilities.print(_SCIKeyValue));
+        w.end("SCIKeyData");
+    }
+
+    public void unmarshal(Unmarshaller u)
+        throws UnmarshalException
+    {
+        XMLScanner xs = u.scanner();
+        Validator v = u.validator();
+        xs.takeStart("SCIKeyData");
+        while (xs.atAttribute()) {
+            String an = xs.takeAttributeName();
+            throw new InvalidAttributeException(an);
+        }
+        if (xs.atStart("MKIdentifier")) {
+            xs.takeStart("MKIdentifier");
+            String s;
+            if (xs.atChars(XMLScanner.WS_COLLAPSE)) {
+                s = xs.takeChars(XMLScanner.WS_COLLAPSE);
+            } else {
+                s = "";
+            }
+            try {
+                _MKIdentifier = ByteArrayUtilities.parse(s);
+            } catch (Exception x) {
+                throw new ConversionException("MKIdentifier", x);
+            }
+            xs.takeEnd("MKIdentifier");
+        }
+        if (xs.atStart("SMType")) {
+            xs.takeStart("SMType");
+            String s;
+            if (xs.atChars(XMLScanner.WS_COLLAPSE)) {
+                s = xs.takeChars(XMLScanner.WS_COLLAPSE);
+            } else {
+                s = "";
+            }
+            try {
+                _SMType = String.valueOf(s);
+            } catch (Exception x) {
+                throw new ConversionException("SMType", x);
+            }
+            xs.takeEnd("SMType");
+        }
+        {
+            List l = PredicatedLists.create(this, pred_KeyUsage, new ArrayList());
+            while (xs.atStart("KeyUsage")) {
+                l.add(((XMLSCIKeyUsage) u.unmarshal()));
+            }
+            _KeyUsage = PredicatedLists.createInvalidating(this, pred_KeyUsage, l);
+        }
+        if (xs.atStart("Component")) {
+            xs.takeStart("Component");
+            String s;
+            if (xs.atChars(XMLScanner.WS_COLLAPSE)) {
+                s = xs.takeChars(XMLScanner.WS_COLLAPSE);
+            } else {
+                s = "";
+            }
+            try {
+                _Component = String.valueOf(s);
+            } catch (Exception x) {
+                throw new ConversionException("Component", x);
+            }
+            xs.takeEnd("Component");
+        }
+        if (xs.atStart("KeyType")) {
+            xs.takeStart("KeyType");
+            String s;
+            if (xs.atChars(XMLScanner.WS_COLLAPSE)) {
+                s = xs.takeChars(XMLScanner.WS_COLLAPSE);
+            } else {
+                s = "";
+            }
+            try {
+                _KeyType = String.valueOf(s);
+            } catch (Exception x) {
+                throw new ConversionException("KeyType", x);
+            }
+            xs.takeEnd("KeyType");
+        }
+        if (xs.atStart("KeySize")) {
+            xs.takeStart("KeySize");
+            String s;
+            if (xs.atChars(XMLScanner.WS_COLLAPSE)) {
+                s = xs.takeChars(XMLScanner.WS_COLLAPSE);
+            } else {
+                s = "";
+            }
+            try {
+                _KeySize = String.valueOf(s);
+            } catch (Exception x) {
+                throw new ConversionException("KeySize", x);
+            }
+            xs.takeEnd("KeySize");
+        }
+        if (xs.atStart("CryptoEngineVersion")) {
+            xs.takeStart("CryptoEngineVersion");
+            String s;
+            if (xs.atChars(XMLScanner.WS_COLLAPSE)) {
+                s = xs.takeChars(XMLScanner.WS_COLLAPSE);
+            } else {
+                s = "";
+            }
+            try {
+                _CryptoEngineVersion = String.valueOf(s);
+            } catch (Exception x) {
+                throw new ConversionException("CryptoEngineVersion", x);
+            }
+            xs.takeEnd("CryptoEngineVersion");
+        }
+        if (xs.atStart("SMExtension")) {
+            xs.takeStart("SMExtension");
+            String s;
+            if (xs.atChars(XMLScanner.WS_COLLAPSE)) {
+                s = xs.takeChars(XMLScanner.WS_COLLAPSE);
+            } else {
+                s = "";
+            }
+            try {
+                _SMExtension = ByteArrayUtilities.parse(s);
+            } catch (Exception x) {
+                throw new ConversionException("SMExtension", x);
+            }
+            xs.takeEnd("SMExtension");
+        }
+        if (xs.atStart("SCIKeyValue")) {
+            xs.takeStart("SCIKeyValue");
+            String s;
+            if (xs.atChars(XMLScanner.WS_COLLAPSE)) {
+                s = xs.takeChars(XMLScanner.WS_COLLAPSE);
+            } else {
+                s = "";
+            }
+            try {
+                _SCIKeyValue = ByteArrayUtilities.parse(s);
+            } catch (Exception x) {
+                throw new ConversionException("SCIKeyValue", x);
+            }
+            xs.takeEnd("SCIKeyValue");
+        }
+        xs.takeEnd("SCIKeyData");
+    }
+
+    public static XMLSCIKeyData unmarshal(InputStream in)
+        throws UnmarshalException
+    {
+        return unmarshal(XMLScanner.open(in));
+    }
+
+    public static XMLSCIKeyData unmarshal(XMLScanner xs)
+        throws UnmarshalException
+    {
+        return unmarshal(xs, newDispatcher());
+    }
+
+    public static XMLSCIKeyData unmarshal(XMLScanner xs, Dispatcher d)
+        throws UnmarshalException
+    {
+        return ((XMLSCIKeyData) d.unmarshal(xs, (XMLSCIKeyData.class)));
+    }
+
+    public boolean equals(Object ob) {
+        if (this == ob) {
+            return true;
+        }
+        if (!(ob instanceof XMLSCIKeyData)) {
+            return false;
+        }
+        XMLSCIKeyData tob = ((XMLSCIKeyData) ob);
+        if (_MKIdentifier!= null) {
+            if (tob._MKIdentifier == null) {
+                return false;
+            }
+            if (!_MKIdentifier.equals(tob._MKIdentifier)) {
+                return false;
+            }
+        } else {
+            if (tob._MKIdentifier!= null) {
+                return false;
+            }
+        }
+        if (_SMType!= null) {
+            if (tob._SMType == null) {
+                return false;
+            }
+            if (!_SMType.equals(tob._SMType)) {
+                return false;
+            }
+        } else {
+            if (tob._SMType!= null) {
+                return false;
+            }
+        }
+        if (_KeyUsage!= null) {
+            if (tob._KeyUsage == null) {
+                return false;
+            }
+            if (!_KeyUsage.equals(tob._KeyUsage)) {
+                return false;
+            }
+        } else {
+            if (tob._KeyUsage!= null) {
+                return false;
+            }
+        }
+        if (_Component!= null) {
+            if (tob._Component == null) {
+                return false;
+            }
+            if (!_Component.equals(tob._Component)) {
+                return false;
+            }
+        } else {
+            if (tob._Component!= null) {
+                return false;
+            }
+        }
+        if (_KeyType!= null) {
+            if (tob._KeyType == null) {
+                return false;
+            }
+            if (!_KeyType.equals(tob._KeyType)) {
+                return false;
+            }
+        } else {
+            if (tob._KeyType!= null) {
+                return false;
+            }
+        }
+        if (_KeySize!= null) {
+            if (tob._KeySize == null) {
+                return false;
+            }
+            if (!_KeySize.equals(tob._KeySize)) {
+                return false;
+            }
+        } else {
+            if (tob._KeySize!= null) {
+                return false;
+            }
+        }
+        if (_CryptoEngineVersion!= null) {
+            if (tob._CryptoEngineVersion == null) {
+                return false;
+            }
+            if (!_CryptoEngineVersion.equals(tob._CryptoEngineVersion)) {
+                return false;
+            }
+        } else {
+            if (tob._CryptoEngineVersion!= null) {
+                return false;
+            }
+        }
+        if (_SMExtension!= null) {
+            if (tob._SMExtension == null) {
+                return false;
+            }
+            if (!_SMExtension.equals(tob._SMExtension)) {
+                return false;
+            }
+        } else {
+            if (tob._SMExtension!= null) {
+                return false;
+            }
+        }
+        if (_SCIKeyValue!= null) {
+            if (tob._SCIKeyValue == null) {
+                return false;
+            }
+            if (!_SCIKeyValue.equals(tob._SCIKeyValue)) {
+                return false;
+            }
+        } else {
+            if (tob._SCIKeyValue!= null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int hashCode() {
+        int h = 0;
+        h = ((127 *h)+((_MKIdentifier!= null)?_MKIdentifier.hashCode(): 0));
+        h = ((127 *h)+((_SMType!= null)?_SMType.hashCode(): 0));
+        h = ((127 *h)+((_KeyUsage!= null)?_KeyUsage.hashCode(): 0));
+        h = ((127 *h)+((_Component!= null)?_Component.hashCode(): 0));
+        h = ((127 *h)+((_KeyType!= null)?_KeyType.hashCode(): 0));
+        h = ((127 *h)+((_KeySize!= null)?_KeySize.hashCode(): 0));
+        h = ((127 *h)+((_CryptoEngineVersion!= null)?_CryptoEngineVersion.hashCode(): 0));
+        h = ((127 *h)+((_SMExtension!= null)?_SMExtension.hashCode(): 0));
+        h = ((127 *h)+((_SCIKeyValue!= null)?_SCIKeyValue.hashCode(): 0));
+        return h;
+    }
+
+    public String toString() {
+        StringBuffer sb = new StringBuffer("<<SCIKeyData");
+        if (_MKIdentifier!= null) {
+            sb.append(" MKIdentifier=");
+            sb.append(ByteArrayUtilities.print(_MKIdentifier));
+        }
+        if (_SMType!= null) {
+            sb.append(" SMType=");
+            sb.append(_SMType.toString());
+        }
+        if (_KeyUsage!= null) {
+            sb.append(" KeyUsage=");
+            sb.append(_KeyUsage.toString());
+        }
+        if (_Component!= null) {
+            sb.append(" Component=");
+            sb.append(_Component.toString());
+        }
+        if (_KeyType!= null) {
+            sb.append(" KeyType=");
+            sb.append(_KeyType.toString());
+        }
+        if (_KeySize!= null) {
+            sb.append(" KeySize=");
+            sb.append(_KeySize.toString());
+        }
+        if (_CryptoEngineVersion!= null) {
+            sb.append(" CryptoEngineVersion=");
+            sb.append(_CryptoEngineVersion.toString());
+        }
+        if (_SMExtension!= null) {
+            sb.append(" SMExtension=");
+            sb.append(ByteArrayUtilities.print(_SMExtension));
+        }
+        if (_SCIKeyValue!= null) {
+            sb.append(" SCIKeyValue=");
+            sb.append(ByteArrayUtilities.print(_SCIKeyValue));
+        }
+        sb.append(">>");
+        return sb.toString();
+    }
+
+    public static Dispatcher newDispatcher() {
+        Dispatcher d = new Dispatcher();
+        d.register("KeyUsage", (XMLSCIKeyUsage.class));
+        d.register("SCIKeyData", (XMLSCIKeyData.class));
+        d.freezeElementNameMap();
+        return d;
+    }
+
+
+    private static class KeyUsagePredicate
+        implements PredicatedLists.Predicate
+    {
+
+
+        public void check(Object ob) {
+            if (!(ob instanceof XMLSCIKeyUsage)) {
+                throw new InvalidContentObjectException(ob, (XMLSCIKeyUsage.class));
+            }
+        }
+
+    }
+
+}

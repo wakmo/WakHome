@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<xml-java-binding-schema version="1.0ea">
+
+  <options package="com.platform7.securecrypto.xmlinterface.generated"/>
+
+  <element name="SCIKeyData" type="class" class="XMLSCIKeyData" root="true"/>
+
+  <element name="MKIdentifier" type="value" convert="ByteArrayConverter"/>
+  <element name="SMType" type="value"/>
+
+  <element name="KeyUsage" type="class" class="XMLSCIKeyUsage">
+    <attribute name="Algorithm"/>
+    <attribute name="Usage"/>
+  </element>
+
+  <element name="Component" type="value"/>
+  <element name="KeyType" type="value"/>
+  <element name="KeySize" type="value"/>
+  <element name="CryptoEngineVersion" type="value"/>
+  <element name="SMExtension" type="value" convert="ByteArrayConverter"/>
+  <element name="SCIKeyValue" type="value" convert="ByteArrayConverter"/>
+
+  <conversion name="ByteArrayConverter" type="java.lang.Object" parse="com.platform7.affinaconfig.standardinfrastructure.utils.ByteArrayConverter.parse" print="com.platform7.affinaconfig.standardinfrastructure.utils.ByteArrayConverter.print"/>
+
+</xml-java-binding-schema>

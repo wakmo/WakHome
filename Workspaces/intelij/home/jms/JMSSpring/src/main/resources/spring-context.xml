@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xsi:schemaLocation="
+    http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd 
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context.xsd">
+ 
+ 
+  <context:component-scan base-package="com.wakkir.test" />
+ 
+  <!-- =============================================== -->
+  <!-- JMS Common，Define JMS connection Factory       -->
+  <!-- =============================================== -->
+  <!-- Activemq connection factory -->
+  <bean id="amqConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+    <!-- brokerURL -->
+    <constructor-arg index="0" value="tcp://localhost:61616" />
+  </bean>
+  
+  <!-- Default Destination Queue Definition -->
+  <bean id="defaultDestination" class="org.apache.activemq.command.ActiveMQQueue">
+    <!-- name of the queue -->
+    <constructor-arg index="0" value="Send2RecieveQueue" />
+  </bean>
+  
+ <!-- Default Reply Destination Queue Definition -->
+  <bean id="defaultReplyDestination" class="org.apache.activemq.command.ActiveMQQueue">
+    <!-- name of the queue -->
+    <constructor-arg index="0" value="Send2ReplyQueue" />
+  </bean>
+  
+  <!-- ======================================================= -->
+  <!-- ======================================================= -->
+  <!-- ======================================================= -->
+
+  <!-- Pooled Spring connection factory -->
+  <bean id="cachingConnectionFactory"   class="org.springframework.jms.connection.CachingConnectionFactory">
+    <constructor-arg ref="amqConnectionFactory" />
+  </bean>
+  
+  <bean id="localJmsTransactionManager"  class="org.springframework.jms.connection.JmsTransactionManager">
+    <!-- can also refer to amq.connectionFactory -->
+    <property name="connectionFactory" ref="cachingConnectionFactory" />
+</bean>
+  
+  
+ <!-- ======================================================= -->
+  <!-- JMS Send, define default destination and JmsTemplate    -->
+  <!-- ======================================================= -->
+   
+  <!-- JmsTemplate Definition -->
+  <bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+    <property name="connectionFactory" ref="cachingConnectionFactory" />
+    <property name="defaultDestination" ref="defaultDestination" />
+  </bean>
+    
+  <!-- ============================================================= -->
+  <!-- JMS Receive，Define MessageListenerContainer                  -->
+  <!-- ============================================================= -->
+  <bean id = "messageListenerContainer" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+    <property name="connectionFactory" ref="cachingConnectionFactory"/>
+    <property name="destinationName" value="Send2RecieveQueue"/>
+    <property name="messageListener" ref="jmsMessageListener"/>
+    <!-- add a reference to the transaction manager -->
+    <property name="transactionManager" ref="localJmsTransactionManager" />
+    <!-- 
+        now tell the broker that it's involved in a transaction; this has the same effect
+        as creating a transacted session using the JMS API
+    -->
+    <property name="sessionTransacted" value="true" />
+    <property name="messageSelector" value="selectId = 'ABC'" />
+  </bean>
+  
+  <bean id = "messageListenerContainer2" class="org.springframework.jms.listener.DefaultMessageListenerContainer">
+    <property name="connectionFactory" ref="cachingConnectionFactory"/>
+    <property name="destinationName" value="Send2RecieveQueue"/>
+    <property name="messageListener" ref="jmsMessageListener2"/>
+    <!-- add a reference to the transaction manager -->
+    <property name="transactionManager" ref="localJmsTransactionManager" />
+    <!-- 
+        now tell the broker that it's involved in a transaction; this has the same effect
+        as creating a transacted session using the JMS API
+    -->
+    <property name="sessionTransacted" value="true" />
+    <property name="messageSelector" value="selectId = 'XYZ'" />
+  </bean>
+ 
+</beans>

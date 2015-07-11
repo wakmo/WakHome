@@ -1,0 +1,14 @@
+<!ELEMENT SCIKeyData (MKIdentifier, SMType, KeyUsage+, Component, KeyType, KeySize, CryptoEngineVersion, SMExtension?, SCIKeyValue)>
+<!ELEMENT MKIdentifier (#PCDATA)>
+<!ELEMENT SMType (#PCDATA)>
+<!ELEMENT KeyUsage EMPTY>
+<!ATTLIST KeyUsage
+	Algorithm NMTOKEN #REQUIRED
+	Usage NMTOKEN #REQUIRED
+>
+<!ELEMENT Component (#PCDATA)>
+<!ELEMENT KeyType (#PCDATA)>
+<!ELEMENT KeySize (#PCDATA)>
+<!ELEMENT CryptoEngineVersion (#PCDATA)>
+<!ELEMENT SMExtension (#PCDATA)>
+<!ELEMENT SCIKeyValue (#PCDATA)>
