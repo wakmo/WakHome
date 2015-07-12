@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:int="http://www.springframework.org/schema/integration"
+  xmlns:amqp="http://www.springframework.org/schema/integration/amqp"
+  xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+    xsi:schemaLocation="http://www.springframework.org/schema/rabbit 
+    http://www.springframework.org/schema/rabbit/spring-rabbit.xsd  
+    http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd 
+    http://www.springframework.org/schema/context 
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/integration 
+    http://www.springframework.org/schema/integration/spring-integration.xsd		
+    http://www.springframework.org/schema/integration/amqp
+    http://www.springframework.org/schema/integration/amqp/spring-integration-amqp.xsd">
+ 
+   
+  <import resource="properties-config.xml"/>
+     
+  <context:component-scan base-package="com.wakkir.rabbitmq" />
+
+  <rabbit:connection-factory id="connectionFactory" host="#{appProperties['amqp.hostName']}" port="#{appProperties['amqp.port']}" />
+
+  <rabbit:admin connection-factory="connectionFactory" />
+  
+  <rabbit:queue  id="myRabbitInQueueId" name="#{appProperties['amqp.queue.1']}" /> 
+  <rabbit:queue  id="myRabbitOutQueueId" name="#{appProperties['amqp.queue.2']}" /> 
+  <rabbit:topic-exchange name="#{appProperties['amqp.exchange']}">
+    <rabbit:bindings>
+        <rabbit:binding queue="myRabbitInQueueId" pattern="#{appProperties['amqp.pattern.1']}" />
+        <rabbit:binding queue="myRabbitOutQueueId" pattern="#{appProperties['amqp.pattern.2']}" />
+    </rabbit:bindings>
+  </rabbit:topic-exchange>    
+    
+    
+  <int:channel id="toAMQPChannel"/>
+  <amqp:inbound-channel-adapter 
+      channel="toAMQPChannel" 
+      queue-names="#{appProperties['amqp.queue.1']}" 
+      connection-factory="connectionFactory" />
+  
+  <int:channel id="fromAMQPChannel"/>
+  <int:service-activator input-channel="toAMQPChannel" 
+                         ref="amqpMsgHandler" 
+                         method="handleMessage" 
+                         output-channel="fromAMQPChannel"/>
+  
+
+  <int:channel id="fromSplittedChannel"/>
+  <int:splitter id="messageHandlingSplitter" 
+                input-channel="fromAMQPChannel"
+                ref="msgSplitter" 
+                output-channel="fromSplittedChannel"/>
+  
+  <int:channel id="messageOutChannel"/>
+  <int:service-activator input-channel="fromSplittedChannel" 
+                         ref="msgHandler" 
+                         method="handleMessage" 
+                         output-channel="messageOutChannel"/>
+  
+  
+  <amqp:outbound-channel-adapter channel="messageOutChannel" amqp-template="messageTemplate"  />
+    
+  <rabbit:template id="messageTemplate" 
+                     connection-factory="connectionFactory"   
+                     exchange="#{appProperties['amqp.exchange']}" 
+                     routing-key="#{appProperties['amqp.routingkey.2']}"/>
+  
+  
+<!--  <rabbit:topic-exchange name="#{appProperties['amqp.exchange.2']}">
+      <rabbit:bindings>            
+          <rabbit:binding queue="myRabbitOutQueueId" pattern="#{appProperties['amqp.pattern.2']}" />
+      </rabbit:bindings>
+   </rabbit:topic-exchange>-->
+
+
+    <bean id="msgHandler"  class="com.wakkir.rabbitmq.spring.MessageHandler" />
+    <bean id="msgSplitter" class="com.wakkir.rabbitmq.spring.MessageSplitter" />
+    <bean id="amqpMsgHandler"  class="com.wakkir.rabbitmq.spring.AMQPMessageHandler" />
+    
+    
+    <rabbit:listener-container connection-factory="connectionFactory">
+        <rabbit:listener ref="foo" method="listen" queues="myRabbitOutQueueId"  />
+    </rabbit:listener-container>
+
+    <bean id="foo" class="com.wakkir.rabbitmq.spring.MyMessageListener" />
+   
+ 
+</beans>

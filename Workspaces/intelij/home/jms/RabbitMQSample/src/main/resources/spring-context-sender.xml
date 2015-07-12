@@ -10,14 +10,16 @@
     http://www.springframework.org/schema/context 
     http://www.springframework.org/schema/context/spring-context.xsd">
  
+  
+  <import resource="properties-config.xml"/>
+    
+  <context:component-scan base-package="com.wakkir.rabbitmq" />
  
-  <context:component-scan base-package="com.wakkir.test" />
- 
-  <rabbit:connection-factory id="connectionFactory" host="localhost" port="5672" />
+  <rabbit:connection-factory id="connectionFactory" host="#{appProperties['amqp.hostName']}" port="#{appProperties['amqp.port']}" />
 
   <rabbit:admin connection-factory="connectionFactory" />
 
-   <rabbit:template id="amqpTemplate" connection-factory="connectionFactory"   exchange="myExchange" routing-key="foo.bar"/>
+  <rabbit:template id="amqpTemplate" connection-factory="connectionFactory"   exchange="#{appProperties['amqp.exchange']}" routing-key="#{appProperties['amqp.routingkey.1']}"/>
 
 
 
