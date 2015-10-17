@@ -15,18 +15,18 @@ public class RenameMediaFileNames
 
     public void renameVideoFiles(boolean needRename,boolean keepSameFolderStructure)  throws ImageProcessingException, IOException
     {
-        String inputPath = "E:\\MyMedia\\MyPictures\\x";
-        String extension = ".mov";
-        String outputPath = "E:\\MyMedia\\MyPictures\\x";
+        String inputPath = "\\\\Fs01\\mymedia\\MyVideos\\STREAM";
+        String extension = ".mts";
+        String outputPath = "\\\\Fs01\\mymedia\\MyVideos\\STREAM";
 
         fmd.readDirectory(inputPath, extension, outputPath,needRename,keepSameFolderStructure,0,15,"");
     }
 
     public void renamePictureFiles(boolean needRename,boolean keepSameFolderStructure) throws ImageProcessingException, IOException
     {
-        String inputPath = "\\\\Fs01\\MyMedia\\MyPictures\\20140411_20140414-IsleOfWeigth\\fuji";
+        String inputPath = "E:\\MyMedia\\MyPictures\\x";
         String extension = ".jpg";
-        String outputPath = "\\\\Fs01\\MyMedia\\MyPictures\\20140411_20140414-IsleOfWeigth\\fuji";
+        String outputPath = "E:\\MyMedia\\MyPictures\\x";
 
         fmd.readDirectory(inputPath, extension, outputPath,needRename,keepSameFolderStructure,0,15,"");
     }
@@ -39,8 +39,8 @@ public class RenameMediaFileNames
             RenameMediaFileNames rename=new RenameMediaFileNames();
             boolean needRename=true;
             boolean keepSameFolderStructure=false;
-            rename.renamePictureFiles(needRename,keepSameFolderStructure);
-            //rename.renameVideoFiles(needRename,keepSameFolderStructure);
+            //rename.renamePictureFiles(needRename,keepSameFolderStructure);
+            rename.renameVideoFiles(needRename,keepSameFolderStructure);
 
         }
         catch (Exception e)

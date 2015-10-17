@@ -18,9 +18,10 @@ import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
-
+/*
 import nu.xom.Builder;
 import nu.xom.ParsingException;
+*/
 import org.xml.sax.InputSource;
 
 import org.xml.sax.SAXException;
@@ -298,7 +299,7 @@ public class XMLValidator
     */
 
     
-    
+    /*
     public void xomValidate() throws ParserConfigurationException, SAXException, ParsingException, IOException
     {   
         //http://www.edankert.com/validate.html
@@ -325,7 +326,7 @@ public class XMLValidator
         Builder builder = new Builder(reader);
         builder.build(is);
     }
-    
+    */
     void saxValidator() throws SAXException, ParserConfigurationException, IOException
     {        
         //http://www.edankert.com/validate.html
@@ -383,7 +384,7 @@ public class XMLValidator
     }
     
     ////////////////////////////////////////////////////////////////////////////
-    
+    /*
     public static void main(String args[]) throws ParsingException
     {
         XMLValidator val = new XMLValidator();
@@ -413,4 +414,5 @@ public class XMLValidator
 
 
     }
+    */
 }

@@ -5,13 +5,14 @@ package com.wakkir.barcode;
  * Date: 18/01/14
  * Time: 18:52
  */
-
+/*
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.google.zxing.qrcode.decoder.Mode;
 import eg.com.tm.barcode.processor.BarcodeEngine;
 import eg.com.tm.barcode.processor.config.DecodeConfig;
 import eg.com.tm.barcode.processor.config.EncodeConfig;
+*/
 
 import java.io.File;
 import java.util.Map;
@@ -21,7 +22,7 @@ import java.util.Map;
  */
 public class BarcodeApplication
 {
-
+/*
     public static void main(String[] args)
     {
         String path="E:\\Wakkir\\workspaces\\Github\\W3Repo\\Workspaces\\intelij\\output";
@@ -93,4 +94,5 @@ public class BarcodeApplication
 
         System.out.println("\n------------------- Finished reading barcodes -------------------");
     }
+    */
 }

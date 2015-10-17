@@ -1,8 +1,8 @@
 package com.wakkir.barcode;
-
+/*
 import com.google.zxing.*;
 import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
-import com.google.zxing.common.HybridBinarizer;
+import com.google.zxing.common.HybridBinarizer;*/
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -25,6 +25,7 @@ public class BarcodeApp2
      * @param hints configuration used when reading the barcode.
      * @return decoded results from barcode.
      */
+    /*
     public static String decode(File file, Map<DecodeHintType, Object> hints) throws Exception
     {
         // check the required parameters
@@ -45,11 +46,13 @@ public class BarcodeApp2
         {
             throw new IllegalArgumentException("Could not decode image.");
         }
+        String finalResult=null;
+       
         LuminanceSource source = new BufferedImageLuminanceSource(image);
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
-        MultiFormatReader barcodeReader = new MultiFormatReader();
+        MultiFormatReader barcodeReader = new MultiFormatReader();                
         Result result;
-        String finalResult=null;
+        
         try
         {
             if (hints != null && !hints.isEmpty())
@@ -70,4 +73,5 @@ public class BarcodeApp2
         }
         return finalResult;
     }
+*/
 }

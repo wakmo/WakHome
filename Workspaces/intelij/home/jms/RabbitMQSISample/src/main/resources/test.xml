@@ -1,0 +1,5 @@
+<root 
+    xmlns="http://www.example.com/DEFAULT" 
+    att1="Hello" 
+    xmlns:foo="http://www.example.com/FOO" 
+    foo:att2="World"/>

@@ -7,6 +7,7 @@ import com.drew.metadata.Metadata;
 import com.drew.metadata.Tag;
 import com.wakkir.utils.CommonUtils;
 import com.wakkir.utils.FileUtils;
+import static com.wakkir.utils.FileUtils.createFolder;
 import java.io.BufferedWriter;
 
 import java.io.File;
@@ -142,6 +143,10 @@ public class AccessFileMetaData
             {
                 doneIt=useBasicFileAttribute4Rename(inputFilePath, extension, newFilePath,needRename,index,primaryFileNameStartIndex,primaryFileNameEndIndex,requiredFormat);
             }
+            else if (".mp4".equalsIgnoreCase(extension) && oldFileName.toLowerCase().endsWith(extension))
+            {
+                doneIt=useBasicFileAttribute4Rename(inputFilePath, extension, newFilePath,needRename,index,primaryFileNameStartIndex,primaryFileNameEndIndex,requiredFormat);
+            }
             return doneIt;
         }
         catch (IOException e)
@@ -183,6 +188,8 @@ public class AccessFileMetaData
         BufferedWriter writer = null;
         try 
         {
+            
+            createFolder(outputPath);
             //create a temporary file
             String timeLog = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
             File logFile = new File(outputPath+File.separator+"info.txt");
